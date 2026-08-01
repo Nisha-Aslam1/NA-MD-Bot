@@ -1,6 +1,6 @@
 // ============================================
 // NA MD Bot - Birthday Auto-Wish System
-// Developer: Nisha Aslam | NA Mods
+// Developer: Nisha Aslam
 // Exactly midnight wish • custom messages • set for any number
 // ============================================
 

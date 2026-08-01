@@ -1,6 +1,6 @@
 // ============================================
 // NA MD Bot - Purge / Delete Messages
-// Developer: Nisha Aslam | NA Mods
+// Developer: Nisha Aslam
 // ============================================
 
 export default {

@@ -1,6 +1,6 @@
 // ============================================
 // NA MD Bot - AI Virtual Boyfriend (.bf)
-// Developer: Nisha Aslam | NA Mods
+// Developer: Nisha Aslam
 //
 // Commands:
 //   .bf <message>   — chat with your AI boyfriend Zayan

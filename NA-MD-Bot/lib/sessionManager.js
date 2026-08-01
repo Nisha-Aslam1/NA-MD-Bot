@@ -339,7 +339,7 @@ export async function createSession(sessionId = 'default', usePairingCode = fals
                 `▸ Type *.menu* to see all commands\n` +
                 `▸ *.antiviewonce on* — auto-reveal view-once\n` +
                 `▸ *.help* — guide & tips\n\n` +
-                `> 🤖 *Powered by NA MD Bot | NA Mods*`,
+                `> 🤖 *Powered by NA MD Bot*`,
             });
           } catch (_) {}
         }, 3000); // 3s delay so connection fully stabilises first

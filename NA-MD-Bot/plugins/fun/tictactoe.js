@@ -1,6 +1,6 @@
 // ============================================
 // NA MD Bot - Tic Tac Toe
-// Developer: Nisha Aslam | NA Mods
+// Developer: Nisha Aslam
 // ============================================
 
 const games = new Map();

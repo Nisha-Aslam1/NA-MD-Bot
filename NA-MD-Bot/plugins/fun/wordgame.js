@@ -1,6 +1,6 @@
 // ============================================
 // NA MD Bot - Word Scramble Game
-// Developer: Nisha Aslam | NA Mods
+// Developer: Nisha Aslam
 // ============================================
 
 const WORDS = [

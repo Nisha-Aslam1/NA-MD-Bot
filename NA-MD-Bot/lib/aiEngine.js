@@ -34,7 +34,7 @@ export function addHistory(jid, role, content) {
 }
 
 // ── Default system prompt ─────────────────────────────────────────────────────
-export const DEFAULT_SYSTEM = `You are NA MD Bot, a WhatsApp AI assistant by NA Mods.
+export const DEFAULT_SYSTEM = `You are NA MD Bot, a WhatsApp AI assistant by Nisha Aslam.
 
 ANSWER LENGTH — match the question:
 - Simple/factual → 1 to 3 lines, straight answer

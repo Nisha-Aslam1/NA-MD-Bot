@@ -8,7 +8,7 @@ export default {
 
   async execute({ sock, jid, msg, reply, react, text, prefix }) {
     if (!text) return reply(
-      `📇 *vCard Generator*\n\n*Format:*\n_${prefix}vcard Name | Number | Email | Company | Website_\n\n*Only Name and Number are required:*\n_${prefix}vcard Ahmed Ali | 923001234567_\n\n*Full format:*\n_${prefix}vcard Ahmed Ali | 923001234567 | ahmed@email.com | NA Mods | aamods.com_\n\n> 🤖 *NA MD Bot*`
+      `📇 *vCard Generator*\n\n*Format:*\n_${prefix}vcard Name | Number | Email | Company | Website_\n\n*Only Name and Number are required:*\n_${prefix}vcard Ahmed Ali | 923001234567_\n\n*Full format:*\n_${prefix}vcard Ahmed Ali | 923001234567 | ahmed@email.com | aamods.com_\n\n> 🤖 *NA MD Bot*`
     );
 
     const parts = text.split('|').map(s => s.trim());

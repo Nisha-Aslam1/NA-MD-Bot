@@ -375,7 +375,7 @@ async function weather(city) {
 }
 
 // ── AI — per-user memory + multi-model fallback ───────────────────────────────
-const AI_SYSTEM = `You are NA MD Bot — a highly intelligent AI assistant built by NA Mods (Nisha Aslam).
+const AI_SYSTEM = `You are NA MD Bot — a highly intelligent AI assistant built by Nisha Aslam.
 
 Your Expertise: Science, Technology, Programming, Mathematics, History, Islam, Culture, Medicine, Law basics, Business, and general knowledge.
 

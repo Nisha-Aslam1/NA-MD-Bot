@@ -1,6 +1,6 @@
 // ============================================
 // NA MD Bot - Add New Device (Pairing Code)
-// Developer: Nisha Aslam | NA Mods
+// Developer: Nisha Aslam
 // Sends pairing code via WhatsApp — no console needed
 // ============================================
 

@@ -1,6 +1,6 @@
 // ============================================
 // NA MD Bot - Convert Sticker/Video to GIF
-// Developer: Nisha Aslam | NA Mods
+// Developer: Nisha Aslam
 // ============================================
 
 import { downloadContentFromMessage } from '@whiskeysockets/baileys';

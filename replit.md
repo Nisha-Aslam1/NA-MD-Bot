@@ -44,7 +44,7 @@ admin, download, search, fun, gb, group, owner, islamic, media, tools, and utili
 
 - Bot name: NA MD Bot
 - Developer: Nisha Aslam
-- Brand: NA Mods
+- Brand: NA MD Bot
 - Default prefix: `.`
 
 ## Gotchas

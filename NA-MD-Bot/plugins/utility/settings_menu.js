@@ -42,7 +42,7 @@ function getCtx() {
     isForwarded: true,
     externalAdReply: {
       title: CHANNEL_NAME,
-      body: 'NA Mods • Tap to join our channel',
+      body: 'NA MD Bot • Tap to join our channel',
       mediaType: 1,
       renderLargerThumbnail: false,
       showAdAttribution: true,

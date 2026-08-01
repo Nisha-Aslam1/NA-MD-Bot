@@ -146,4 +146,4 @@ pm2 restart na-md-bot
 
 [Baileys](https://github.com/WhiskeySockets/Baileys) · [MongoDB](https://www.mongodb.com/) · [yt-dlp](https://github.com/yt-dlp/yt-dlp) · [ffmpeg](https://ffmpeg.org/) · [PM2](https://pm2.keymetrics.io/)
 
-**Developer:** Nisha Aslam — NA Mods
+**Developer:** Nisha Aslam

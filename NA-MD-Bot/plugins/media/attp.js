@@ -156,7 +156,7 @@ export default {
 
       const sticker = new Sticker(gifBuf, {
         pack:       config.botName || 'NA MD Bot',
-        author:     config.ownerName || 'NA Mods',
+        author:     config.ownerName || 'Nisha Aslam',
         type:       StickerTypes.FULL,
         categories: ['🤩', '✨'],
         quality:    80,

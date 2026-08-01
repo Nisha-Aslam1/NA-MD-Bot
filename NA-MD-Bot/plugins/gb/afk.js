@@ -1,6 +1,6 @@
 // ============================================
 // NA MD Bot - AFK Mode
-// Developer: Nisha Aslam | NA Mods
+// Developer: Nisha Aslam
 // ============================================
 
 // Per-session AFK state — keyed by sessionId

@@ -1,6 +1,6 @@
 // ============================================
 // NA MD Bot - Spotify Downloader
-// Developer: Nisha Aslam | NA Mods
+// Developer: Nisha Aslam
 //
 // Commands:
 //   .spotify <song name or Spotify URL>

@@ -4,127 +4,229 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>NA MD Bot — Server</title>
-    <meta name="theme-color" content="#25d366" />
+    <meta name="theme-color" content="#7C3AED" />
     <link rel="icon" type="image/png" href="/logo.png?v=1" />
     <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
       * { margin: 0; padding: 0; box-sizing: border-box; }
+
       body {
-        background: #060911;
-        color: #dde6f4;
-        font-family: 'Segoe UI', sans-serif;
+        background: #09071A;
+        color: #E2D9F3;
+        font-family: 'Inter', 'Segoe UI', sans-serif;
         min-height: 100vh;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        gap: 32px;
-        padding: 24px;
+        gap: 28px;
+        padding: 32px 20px;
+        overflow-x: hidden;
+      }
+
+      /* ── Ambient background glow ── */
+      body::before {
+        content: '';
+        position: fixed;
+        top: -200px; left: 50%;
+        transform: translateX(-50%);
+        width: 700px; height: 500px;
+        background: radial-gradient(ellipse at center, rgba(124,58,237,0.18) 0%, rgba(88,28,220,0.08) 50%, transparent 75%);
+        pointer-events: none;
+        z-index: 0;
+      }
+      body::after {
+        content: '';
+        position: fixed;
+        bottom: -150px; left: 50%;
+        transform: translateX(-50%);
+        width: 500px; height: 400px;
+        background: radial-gradient(ellipse at center, rgba(168,85,247,0.1) 0%, transparent 70%);
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      /* ── Logo ── */
+      .logo-wrap {
+        position: relative;
+        z-index: 1;
+      }
+      .logo-wrap::before {
+        content: '';
+        position: absolute;
+        inset: -12px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(139,92,246,0.35) 0%, transparent 70%);
+        animation: glow-pulse 3s ease-in-out infinite;
+      }
+      @keyframes glow-pulse {
+        0%, 100% { opacity: 0.7; transform: scale(1); }
+        50%       { opacity: 1;   transform: scale(1.1); }
       }
       .logo {
-        width: 80px;
-        height: 80px;
+        position: relative;
+        width: 100px; height: 100px;
         border-radius: 50%;
-        border: 2px solid #25d366;
-        box-shadow: 0 0 24px rgba(37,211,102,0.3);
+        border: 2px solid rgba(139,92,246,0.8);
+        box-shadow:
+          0 0 0 4px rgba(139,92,246,0.15),
+          0 0 32px rgba(139,92,246,0.45),
+          0 0 64px rgba(88,28,220,0.25);
+        display: block;
       }
+
+      /* ── Title ── */
       h1 {
-        font-size: 1.6rem;
-        font-weight: 700;
+        position: relative;
+        z-index: 1;
+        font-size: 1.75rem;
+        font-weight: 800;
         color: #fff;
+        letter-spacing: -0.02em;
+        text-align: center;
       }
-      h1 span { color: #25d366; }
+      h1 .accent {
+        background: linear-gradient(135deg, #A855F7, #7C3AED);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      /* ── Status pill ── */
       .status {
-        display: flex;
+        position: relative;
+        z-index: 1;
+        display: inline-flex;
         align-items: center;
         gap: 8px;
-        font-size: 0.9rem;
-        color: #6b7f99;
-        background: #0d1421;
-        border: 1px solid #182030;
+        font-size: 0.82rem;
+        font-weight: 500;
+        color: #A78BFA;
+        background: rgba(139,92,246,0.1);
+        border: 1px solid rgba(139,92,246,0.3);
         border-radius: 999px;
         padding: 6px 16px;
+        letter-spacing: 0.02em;
       }
       .dot {
-        width: 8px; height: 8px;
+        width: 7px; height: 7px;
         border-radius: 50%;
-        background: #25d366;
-        box-shadow: 0 0 6px #25d366;
-        animation: pulse 2s infinite;
+        background: #A855F7;
+        box-shadow: 0 0 8px #A855F7, 0 0 16px rgba(168,85,247,0.6);
+        animation: dot-pulse 2s ease-in-out infinite;
       }
-      @keyframes pulse {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.4; }
+      @keyframes dot-pulse {
+        0%, 100% { opacity: 1; box-shadow: 0 0 8px #A855F7, 0 0 16px rgba(168,85,247,0.6); }
+        50%       { opacity: 0.5; box-shadow: 0 0 4px #A855F7; }
       }
+
+      /* ── CTA Button ── */
       .btn {
+        position: relative;
+        z-index: 1;
         display: inline-flex;
         align-items: center;
         gap: 10px;
-        background: #25d366;
-        color: #000;
+        background: linear-gradient(135deg, #7C3AED, #6D28D9);
+        color: #fff;
         font-weight: 700;
-        font-size: 1rem;
-        padding: 14px 32px;
-        border-radius: 12px;
+        font-size: 0.97rem;
+        padding: 14px 36px;
+        border-radius: 14px;
         text-decoration: none;
-        transition: transform 0.15s, box-shadow 0.15s;
-        box-shadow: 0 4px 20px rgba(37,211,102,0.35);
+        transition: transform 0.18s, box-shadow 0.18s;
+        box-shadow: 0 4px 20px rgba(124,58,237,0.45), 0 1px 0 rgba(255,255,255,0.1) inset;
+        letter-spacing: 0.01em;
       }
       .btn:hover {
         transform: translateY(-2px);
-        box-shadow: 0 8px 28px rgba(37,211,102,0.5);
+        box-shadow: 0 8px 32px rgba(124,58,237,0.65), 0 1px 0 rgba(255,255,255,0.15) inset;
       }
-      .btn svg { width: 20px; height: 20px; }
-      .about {
+      .btn:active { transform: translateY(0); }
+      .btn svg { width: 18px; height: 18px; }
+
+      /* ── Info cards ── */
+      .cards {
+        position: relative;
+        z-index: 1;
         display: flex;
         flex-direction: column;
         gap: 10px;
         width: 100%;
-        max-width: 340px;
+        max-width: 360px;
       }
-      .about-item {
+      .card {
         display: flex;
         align-items: center;
         gap: 14px;
-        background: #0d1421;
-        border: 1px solid #182030;
-        border-radius: 12px;
-        padding: 12px 16px;
+        background: rgba(139,92,246,0.06);
+        border: 1px solid rgba(139,92,246,0.18);
+        border-radius: 14px;
+        padding: 13px 16px;
+        transition: border-color 0.2s, background 0.2s;
       }
-      .about-item svg {
-        width: 20px;
-        height: 20px;
+      .card:hover {
+        border-color: rgba(139,92,246,0.4);
+        background: rgba(139,92,246,0.1);
+      }
+      .card-icon {
+        width: 38px; height: 38px;
+        border-radius: 10px;
+        background: rgba(139,92,246,0.15);
+        border: 1px solid rgba(139,92,246,0.25);
+        display: flex; align-items: center; justify-content: center;
         flex-shrink: 0;
       }
-      .about-item > div {
-        display: flex;
-        flex-direction: column;
-        gap: 2px;
-      }
-      .label {
-        font-size: 0.72rem;
-        color: #3d4f65;
+      .card-icon svg { width: 18px; height: 18px; }
+      .card-body { display: flex; flex-direction: column; gap: 2px; }
+      .card-label {
+        font-size: 0.68rem;
+        color: #7C5CB8;
         text-transform: uppercase;
-        letter-spacing: 0.05em;
-      }
-      .value {
-        font-size: 0.92rem;
-        color: #dde6f4;
+        letter-spacing: 0.07em;
         font-weight: 600;
       }
-      .sub {
-        font-size: 0.75rem;
-        color: #4a6080;
-        margin-top: 2px;
+      .card-value {
+        font-size: 0.92rem;
+        color: #EDE9FE;
+        font-weight: 600;
       }
-      .privacy {
-        border-color: rgba(37,211,102,0.2);
-        background: rgba(37,211,102,0.04);
+      .card-sub {
+        font-size: 0.74rem;
+        color: #6B5A8A;
+        margin-top: 1px;
+      }
+
+      /* ── Highlighted card ── */
+      .card-privacy {
+        border-color: rgba(139,92,246,0.28);
+        background: rgba(109,40,217,0.08);
+      }
+
+      /* ── Footer ── */
+      .footer {
+        position: relative;
+        z-index: 1;
+        font-size: 0.75rem;
+        color: #4B3A6E;
+        text-align: center;
       }
     </style>
   </head>
   <body>
-    <img src="/logo.png?v=1" class="logo" alt="NA MD Bot" onerror="this.style.display='none'" />
-    <h1>NA MD <span>Bot</span></h1>
+
+    <div class="logo-wrap">
+      <img src="/logo.png?v=1" class="logo" alt="NA MD Bot" onerror="this.style.display='none'" />
+    </div>
+
+    <h1>NA MD <span class="accent">Bot</span></h1>
+
+    <div class="status">
+      <span class="dot"></span>
+      Server Online
+    </div>
+
     <a href="https://na-md-bot.vercel.app/" target="_blank" class="btn">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
         <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
@@ -134,52 +236,74 @@
       Open Dashboard
     </a>
 
-    <div class="about">
-      <div class="about-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#25d366" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-        <div>
-          <span class="label">Version</span>
-          <span class="value">v1.0.0</span>
+    <div class="cards">
+
+      <div class="card">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#A855F7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div class="card-body">
+          <span class="card-label">Version</span>
+          <span class="card-value">v1.0.0</span>
         </div>
       </div>
-      <div class="about-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#25d366" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-        <div>
-          <span class="label">Developer</span>
-          <span class="value">Nisha Aslam</span>
+
+      <div class="card">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#A855F7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <div class="card-body">
+          <span class="card-label">Developer</span>
+          <span class="card-value">Nisha Aslam</span>
         </div>
       </div>
-      <div class="about-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#25d366" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-        <div>
-          <span class="label">Platform</span>
-          <span class="value">Multi-Device WhatsApp</span>
+
+      <div class="card">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#A855F7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        </div>
+        <div class="card-body">
+          <span class="card-label">Platform</span>
+          <span class="card-value">Multi-Device WhatsApp</span>
         </div>
       </div>
-      <div class="about-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#25d366" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-        <div>
-          <span class="label">Features</span>
-          <span class="value">200+ Commands &amp; Tools</span>
-          <span class="sub">Downloader · AI · Islamic · Fun · Group</span>
+
+      <div class="card">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#A855F7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        </div>
+        <div class="card-body">
+          <span class="card-label">Features</span>
+          <span class="card-value">200+ Commands &amp; Tools</span>
+          <span class="card-sub">Downloader · AI · Islamic · Fun · Group</span>
         </div>
       </div>
-      <div class="about-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#25d366" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
-        <div>
-          <span class="label">Multi-Session</span>
-          <span class="value">Multiple Numbers at Once</span>
-          <span class="sub">Connect many WhatsApp accounts simultaneously</span>
+
+      <div class="card">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#A855F7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+        </div>
+        <div class="card-body">
+          <span class="card-label">Multi-Session</span>
+          <span class="card-value">Multiple Numbers at Once</span>
+          <span class="card-sub">Connect many WhatsApp accounts simultaneously</span>
         </div>
       </div>
-      <div class="about-item privacy">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#25d366" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        <div>
-          <span class="label">Privacy &amp; Security</span>
-          <span class="value">Your Data is 100% Safe</span>
-          <span class="sub">No chats or media saved · Temp files auto-deleted</span>
+
+      <div class="card card-privacy">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#A855F7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="card-body">
+          <span class="card-label">Privacy &amp; Security</span>
+          <span class="card-value">Your Data is 100% Safe</span>
+          <span class="card-sub">No chats or media saved · Temp files auto-deleted</span>
         </div>
       </div>
+
     </div>
+
+    <p class="footer">NA MD Bot v1.0.0 · Developed by Nisha Aslam</p>
+
   </body>
 </html>

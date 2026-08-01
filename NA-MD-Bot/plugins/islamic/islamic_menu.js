@@ -1,6 +1,6 @@
 // ============================================
 // NA MD Bot - Islamic Menu Plugin
-// Developer: Nisha Aslam | NA Mods
+// Developer: Nisha Aslam
 // ============================================
 
 import { plugins } from '../../lib/pluginLoader.js';
@@ -47,7 +47,7 @@ function getCtx() {
     isForwarded: true,
     externalAdReply: {
       title: CHANNEL_NAME,
-      body: 'NA Mods • Tap to join our channel',
+      body: 'NA MD Bot • Tap to join our channel',
       mediaType: 1,
       renderLargerThumbnail: false,
       showAdAttribution: true,
@@ -116,7 +116,7 @@ export default {
 
     let menu = `╔══════════════════════════════╗\n`;
     menu    += `║  ☪️  *ISLAMIC COMMANDS*  🤲    ║\n`;
-    menu    += `║    *NA MD Bot — NA Mods*      ║\n`;
+    menu    += `║    *NA MD Bot*      ║\n`;
     menu    += `╚══════════════════════════════╝\n\n`;
     menu    += `بِسْمِ اللَّهِ الرَّحْمٰنِ الرَّحِيمِ\n\n`;
     menu    += `📦 *Total Islamic Commands:* ${total}\n`;

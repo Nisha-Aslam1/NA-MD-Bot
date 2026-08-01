@@ -1,6 +1,6 @@
 // ============================================
 // NA MD Bot - View-Once Reveal Plugin
-// Developer: Nisha Aslam | NA Mods
+// Developer: Nisha Aslam
 //
 // Strategy:
 //  1. PRIMARY  — download directly from the quoted message's media keys

@@ -1,6 +1,6 @@
 // ============================================
 // NA MD Bot - Morse Code
-// Developer: Nisha Aslam | NA Mods
+// Developer: Nisha Aslam
 // ============================================
 
 const ENCODE = {

@@ -1,6 +1,6 @@
 // ============================================
 // NA MD Bot - AI Video Generator
-// Developer: Nisha Aslam | NA Mods
+// Developer: Nisha Aslam
 //
 // Commands:
 //   .aivideo <prompt>   — Generate AI video from text

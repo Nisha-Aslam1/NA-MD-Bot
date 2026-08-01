@@ -25,7 +25,7 @@
     "baileys",
     "oracle"
   ],
-  "author": "Nisha Aslam (NA Mods)",
+  "author": "Nisha Aslam",
   "license": "MIT",
   "dependencies": {
     "@fantox01/lyrics-scraper": "^4.0.0",

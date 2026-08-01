@@ -21,7 +21,7 @@ export default {
         `*Usage:* Reply to a sticker with:\n` +
         `*.take <pack name> | <author>*\n\n` +
         `*Examples:*\n` +
-        `• *.take My Pack | NA Mods*\n` +
+        `• *.take My Pack*\n` +
         `• *.take Funny Stickers*\n\n` +
         `> 🏷️ *NA MD Bot*`
       );
@@ -29,7 +29,7 @@ export default {
 
     const parts = text.split('|').map(s => s.trim());
     const packName = parts[0] || config.botName || 'NA MD Bot';
-    const author   = parts[1] || config.ownerName || 'NA Mods';
+    const author   = parts[1] || config.ownerName || 'Nisha Aslam';
 
     await react('⏳');
 

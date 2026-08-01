@@ -1,6 +1,6 @@
 // ============================================
 // NA MD Bot — XVideos Search & Download 🔞
-// Developer: Nisha Aslam | NA Mods
+// Developer: Nisha Aslam
 //
 // SELF-CHAT ONLY — works only in owner's "You" chat
 // Search via DC /xxx/xvideos API

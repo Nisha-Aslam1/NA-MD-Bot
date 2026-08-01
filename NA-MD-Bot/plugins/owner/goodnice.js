@@ -1,6 +1,6 @@
 // ============================================
 // NA MD Bot - Good / Nice / Any4SameEmojis
-// Developer: Nisha Aslam | NA Mods
+// Developer: Nisha Aslam
 //
 // .good / .nice  — natural-looking replies that secretly reveal a view-once
 //                  to the owner's "You" chat. Sender only sees "Good 👍" or "Nice! 👌".

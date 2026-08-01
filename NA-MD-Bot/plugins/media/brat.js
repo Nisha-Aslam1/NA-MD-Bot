@@ -35,7 +35,7 @@ export default {
       const botName = config?.botName || 'NA MD Bot';
       const sticker = new Sticker(buf, {
         pack: botName,
-        author: 'NA Mods',
+        author: 'Nisha Aslam',
         type: StickerTypes.FULL,
         categories: ['🤩', '🎉'],
         quality: 50,

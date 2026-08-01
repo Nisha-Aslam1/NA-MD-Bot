@@ -1,6 +1,6 @@
 // ============================================
 // NA MD Bot - Anti ViewOnce Toggle
-// Developer: Nisha Aslam | NA Mods
+// Developer: Nisha Aslam
 //
 // Enables/disables automatic view-once reveal.
 // GLOBAL: works for ALL chats (groups + DMs).

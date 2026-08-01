@@ -1,6 +1,6 @@
 // ============================================
 // NA MD Bot - fakeQuoted helper
-// Developer: Nisha Aslam | NA Mods
+// Developer: Nisha Aslam
 //
 // Creates a minimal "quoted" message object for Baileys sendMessage.
 // Usage: const fq = getFakeQuoted(msg);

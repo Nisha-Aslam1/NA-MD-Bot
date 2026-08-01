@@ -82,7 +82,7 @@ function printBanner() {
 ╔══════════════════════════════════════╗
 ║       NA MD BOT  v${config.version}           ║
 ║   Developer: Nisha Aslam       ║
-║        Brand: NA Mods               ║
+║        Brand: NA MD Bot             ║
 ║   Multi-Device WhatsApp Bot         ║
 ╚══════════════════════════════════════╝`));
 }
