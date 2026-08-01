@@ -4,7 +4,7 @@ A production-ready multi-device WhatsApp bot with 226 plugins, multi-session sup
 
 ## Run & Operate
 
-- Workflow **"AA MD Bot"** starts the bot automatically — just hit Run.
+- Workflow **"NA MD Bot"** starts the bot automatically — just hit Run.
 - On first start, use the dashboard pairing flow to connect WhatsApp.
 - Web dashboard: `http://localhost:5000/` (visible in the Replit preview pane).
 - Persistent storage requires `MONGODB_URI` (or the legacy `MONGODB_PASSWORD`) in the environment. Without it, the bot intentionally runs in memory and loses data on restart.
@@ -18,22 +18,20 @@ A production-ready multi-device WhatsApp bot with 226 plugins, multi-session sup
 
 ## Where things live
 
-- `AA-MD-Bot/index.js` — main entry point
-- `AA-MD-Bot/config.js` — bot configuration (owners, prefix, API keys, etc.)
-- `AA-MD-Bot/lib/` — core engine (sessions, commands, plugins, database)
-- `AA-MD-Bot/plugins/` — 226 plugins in 11 categories
-- `AA-MD-Bot/lib/database.js` — MongoDB persistence and cache
-- `AA-MD-Bot/lib/mongoAuthState.js` — MongoDB-backed WhatsApp auth state
-- `AA-MD-Bot/session/` — runtime directory; auth is stored in MongoDB
-- `AA-MD-Bot/dashboard.html` — web dashboard UI
-
-*(Note: folder is still named AA-MD-Bot on Replit — renaming would break the workflow)*
+- `NA-MD-Bot/index.js` — main entry point
+- `NA-MD-Bot/config.js` — bot configuration (owners, prefix, API keys, etc.)
+- `NA-MD-Bot/lib/` — core engine (sessions, commands, plugins, database)
+- `NA-MD-Bot/plugins/` — 226 plugins in 11 categories
+- `NA-MD-Bot/lib/database.js` — MongoDB persistence and cache
+- `NA-MD-Bot/lib/mongoAuthState.js` — MongoDB-backed WhatsApp auth state
+- `NA-MD-Bot/session/` — runtime directory; auth is stored in MongoDB
+- `NA-MD-Bot/dashboard.html` — web dashboard UI
 
 ## Plugin categories
 
 admin, download, search, fun, gb, group, owner, islamic, media, tools, and utility
 
-## Configuration (`AA-MD-Bot/config.js`)  <!-- NA MD Bot -->
+## Configuration (`NA-MD-Bot/config.js`)
 
 - **Owner number**: `ownerNumber` — set your WhatsApp number here for owner commands
 - **Prefixes**: `.`, `!`, `#` by default
@@ -53,7 +51,7 @@ admin, download, search, fun, gb, group, owner, islamic, media, tools, and utili
 
 - Use the dashboard pairing flow to connect WhatsApp on first run.
 - ffmpeg should be available for media plugins (sticker/blur/flip/grayscale/resize/toaudio).
-- `ownerNumber` in `config.js` controls who has owner-level access.
+- `ownerNumber` in `NA-MD-Bot/config.js` controls who has owner-level access.
 - On Oracle Cloud, MongoDB and PM2 are managed by the deployment script; do not delete `/var/lib/mongodb` unless you intentionally want to erase all sessions and bot data.
 - Use `.reload` command in WhatsApp to hot-reload plugins without restarting.
 - yt-dlp is downloaded automatically by the workflow startup command.

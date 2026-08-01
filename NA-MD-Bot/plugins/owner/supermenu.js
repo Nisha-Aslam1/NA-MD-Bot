@@ -45,7 +45,7 @@ export default {
 
       `🤖 *AI AUTO-REPLY*\n` +
       `▸ *${p}autoai instructions* <context> — Set persona\n` +
-      `   _e.g. I am Ahsan, busy developer from Pakistan_\n` +
+      `   _e.g. I am Nisha, busy developer from Pakistan_\n` +
       `▸ *${p}autoai on/off*         — AI replies as you\n` +
       `▸ *${p}autoreply* <msg>       — Static busy message\n` +
       `▸ *${p}autoreply off*         — Disable auto reply\n\n` +

@@ -258,7 +258,7 @@ export default {
 
     // ── Full menu ───────────────────────────────────────────────────────────
     const greeting = isSuperOwnerUser
-      ? `👑 *${greet()}, Ahsan Bhai!*\n_Super Owner — Full Access_`
+      ? `👑 *${greet()}, Nisha!*\n_Super Owner — Full Access_`
       : isOwner
         ? `🔑 *${greet()}, Owner!*\n_Bot control panel active_`
         : `✨ *${greet()}, ${pushName}!*\n_Welcome to NA MD Bot_`;
