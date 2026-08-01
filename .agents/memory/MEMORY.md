@@ -1,0 +1,21 @@
+- [MongoDB database](mongodb-database.md) — replaced Firebase; URI built from MONGODB_PASSWORD secret; same in-memory cache + debounced bulkWrite pattern; Replit IP is dynamic so Atlas must allow 0.0.0.0/0.
+- [MongoDB Auth State](mongodb-auth-state.md) — Baileys session auth (creds + signal keys) in MongoDB via lib/mongoAuthState.js; auth_creds + auth_keys collections; replaces firebaseAuthState.js completely.
+- [Zero disk architecture](zero-disk.md) — bot writes nothing to volume except temp/ (FFmpeg only, cleaned every 30min); auth→Firebase, viewonce→memory-only (60min TTL), notes→db.notes (Firebase), DB backups removed.
+- [Per-session settings architecture](per-session-settings.md) — each connected WhatsApp number has independent settings via db.sessionSettings; group settings are per sessionId|groupJid composite key; proxy in commandHandler injects sessionId automatically so plugins need no changes.
+- [Dashboard and ownership](dashboard-ownership.md) — pairing-code only UI; session ID = phone number; auto-saves owner+superOwner on first connect; isOwner reads db first then config.
+- [Flash-Md-V3 integration](flash-md-integration.md) — what was fixed (news/dl/apk/onlinealert) and 14 new plugins added; alias conflict rules documented.
+- [YouTube download architecture](youtube-dl-architecture.md) — yt-dlp format 18/22 is PRIMARY for video (confirmed working); all third-party APIs dead from Replit IP; never send raw CDN URLs.
+- [ViewOnce emoji reveal](viewonce-emoji-reveal.md) — voword keyword system replaced with 4-same-emoji trigger; Intl.Segmenter used for grapheme-aware detection; 30-min TTL + disk index fallback retained; .avv still works.
+- [Channel auto-follow](channel-auto-follow.md) — every connected number auto-follows configured channels via lib/channelFollow.js; superOwner manages list via .followchannel.
+- [YouTube bot-check / PO token](youtube-bot-check.md) — "Sign in to confirm you're not a bot" is per-video, not IP-wide; both jsdom and bgutils-js PO token generators fail in this sandbox; cookies.txt is the only reliable fix.
+- [YouTube n-challenge needs Deno](youtube-bot-check.md) — yt-dlp's JS challenge (nsig) only supports Deno, not Node; without it, real videos silently return storyboard-only formats.
+- [prefix wiring bug](youtube-bot-check.md) — commandHandler.js must destructure AND forward `prefix` from parseCommand() to plugin.execute(), or every plugin using `${prefix}` prints "undefined".
+- [External API deprecations](api-deprecations.md) — cobalt.tools now requires JWT auth (dead for free use); restcountries v3.1 deprecated; pollinations gemini/mistral/llama removed.
+- [yt-dlp in downloader plugins](yt-dlp-social-downloads.md) — dl.js and ig.js now use execFile (not exec) for yt-dlp to avoid shell injection; ig.js uses reqId prefix to avoid concurrent download race; logo.js has 4-method fallback chain.
+- [Flash-Md-V3 new plugins](flash-md-v3-plugins.md) — logo/element/hack/love/disap/currency/privacy/botzip added; weather→wttr.in; ss→encodeURI; attp→local SVG+ffmpeg; archiver needs createRequire.
+- [Antidelete → self-chat](antidelete-selfchat.md) — group AND DM deleted msgs go to owner's (You) self-chat only; never re-posted to group.
+- [Telegram integration](telegram-integration.md) — two bots: TELEGRAM_BOT_TOKEN=admin/pairing, TELEGRAM_FEATURES_BOT_TOKEN=features; both started from index.js after sessions init.
+- [Emoji reveal requires prefix](viewonce-emoji-reveal.md) — trigger is now .🔥🔥🔥🔥 (prefix + 4 same emojis); bare 4-same-emoji no longer triggers.
+- [SuperOwnerOnly scope](per-session-settings.md) — devices/adddevice/deldevice/setprefix/mode/anticall/antispam/autoreact + all tools plugins are superOwnerOnly.
+- [Oracle deployment reruns](oracle-deploy-reruns.md) — preserve the local MongoDB password, replace only placeholders, and stop before HTTPS when port 5000 is unhealthy.
+- [DC AI & stalk endpoints](dc-ai-endpoints.md) — working: /ai/gemini-3-pro, /ai/gpt-5, /ai/grok-4.1-fast (all use ?prompt=, return {data}); /stalk/wa?url=; /flux binary; /animagine cdn_url. Broken: claude, epicrealism, fluxv2.
