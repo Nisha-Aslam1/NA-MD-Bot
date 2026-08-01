@@ -26,17 +26,15 @@ export default {
     const pushName  = msg.pushName || 'Unknown';
     const senderNum = senderJid.split('@')[0];
 
-    // .contact / .support — show owner contact info
+    // .contact / .support — show contact info
     if (cmd === 'contact' || cmd === 'support') {
-      const ownerNum = config.ownerNumber?.[0] || 'Not set';
       return sock.sendMessage(jid, {
         text:
           `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
           `   📞  *CONTACT / SUPPORT*\n` +
           `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
-          `👨‍💻 *Owner:* ${config.ownerName || config.developer}\n` +
-          `📱 *WhatsApp:* +${ownerNum.replace(/\D/g, '')}\n` +
-          `🤖 *Bot:* ${config.botName}\n` +
+          `👨‍💻 *Developer:* ${config.developer}\n` +
+          `🤖 *Bot:* ${config.botName} v${config.version}\n` +
           `🏢 *Brand:* ${config.brand}\n\n` +
           `💬 *Commands:*\n` +
           `  • *${pref}report <message>* — Report an issue\n` +
@@ -45,7 +43,7 @@ export default {
           `📌 *To include your contact number:*\n` +
           `  ${pref}report .play not working | 03001234567\n\n` +
           `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
-          `🌐 ${LINK}`,
+          `🌐 *Channel:* ${LINK}`,
       }, { quoted: msg });
     }
 

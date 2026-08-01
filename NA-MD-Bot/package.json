@@ -1,6 +1,6 @@
 {
   "name": "na-md-bot",
-  "version": "3.0.0",
+  "version": "1.0.0",
   "description": "NA MD Bot - Multi-Device WhatsApp Bot by Nisha Aslam",
   "main": "index.js",
   "type": "module",

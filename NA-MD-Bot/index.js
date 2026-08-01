@@ -307,6 +307,9 @@ async function startServer() {
       '/favicon.webp': 'image/webp',
       '/banner.jpeg': 'image/jpeg',
       '/logo.jpeg': 'image/jpeg',
+      '/banner.png': 'image/png',
+      '/logo.png': 'image/png',
+      '/favicon.png': 'image/png',
       '/favicon.svg': 'image/svg+xml',
     };
     if (STATIC_IMAGES[p]) {

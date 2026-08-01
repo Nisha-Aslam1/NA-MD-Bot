@@ -82,21 +82,27 @@ function buildChannelCtx() {
 
 export function isOwner(jid) {
   const num = jid?.split("@")[0]?.split(":")[0];
-  if (num === config.superOwner) return true;
+  if (getSuperOwners().includes(num)) return true;
   if (isConnectedSessionOwner(jid)) return true;
   const owners = db.settings.getValue("owners") || config.owners || [];
   return owners.includes(num) || owners.includes(jid);
 }
 
-// SuperOwner is stored in Firebase db.settings so it applies across all servers.
-// Falls back to config.js if DB not yet set.
+// Returns all super owner numbers as an array.
+function getSuperOwners() {
+  const raw = db.settings.getValue("superOwner") || config.superOwner || "";
+  if (Array.isArray(raw)) return raw.map(String).map(s => s.trim()).filter(Boolean);
+  return String(raw).split(',').map(s => s.trim()).filter(Boolean);
+}
+
+// Returns the primary super owner (first in list) for backward-compat.
 function getSuperOwner() {
-  return String(db.settings.getValue("superOwner") || config.superOwner || "");
+  return getSuperOwners()[0] || "";
 }
 
 export function isSuperOwner(jid) {
   const num = jid?.split("@")[0]?.split(":")[0];
-  return num === getSuperOwner();
+  return getSuperOwners().includes(num);
 }
 
 // Banned users stored in db.settings.bannedUsers (Firebase) — persists & syncs across servers
@@ -346,7 +352,7 @@ export async function handleMessage(sock, msg, sessionId) {
 
     // superOwnerOnly: allow if senderJid matches superOwner OR if fromMe on superOwner's own session
     const sessionPhone = sock.user?.id?.split("@")[0]?.split(":")[0];
-    const isSuperOwnerSelf = fromMe && sessionPhone === getSuperOwner();
+    const isSuperOwnerSelf = fromMe && getSuperOwners().includes(sessionPhone);
     if (
       plugin.superOwnerOnly &&
       !isSuperOwner(senderJid) &&
