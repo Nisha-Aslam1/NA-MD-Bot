@@ -29,14 +29,14 @@ function getBanner() {
 
 // ── Newsletter context ────────────────────────────────────────────────────────
 function getCtx() {
-  const jid = global._NA_NEWSLETTER_JID;
+  const jid = global._AA_NEWSLETTER_JID;
   if (!jid) return null;
   return {
     forwardingScore: 999,
     isForwarded: true,
     forwardedNewsletterMessageInfo: {
       newsletterJid: jid,
-      newsletterName: global._NA_NEWSLETTER_NAME || "NA MD Bot",
+      newsletterName: global._AA_NEWSLETTER_NAME || "NA MD Bot",
       serverMessageId: Math.floor(Math.random() * 99999) + 1,
     },
   };
@@ -305,9 +305,6 @@ export default {
       menu += `│     _Auto emoji react to messages_\n`;
       menu += `│\n`;
       menu += `│  👁️ *View-Once Reveal*\n`;
-      menu += `│\n`;
-      menu += `│  ▸ *${pref}antiviewonce on/off*\n`;
-      menu += `│     _Auto-reveal all view-once to (You) chat_\n`;
       menu += `│\n`;
       menu += `│  ▸ *${pref}vv* — reply to view-once\n`;
       menu += `│     _Silently reveal → sent to (You) chat_\n`;
