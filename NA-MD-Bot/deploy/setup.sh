@@ -29,7 +29,7 @@ trap 'STEP_ERR=$?; echo -e "\n${RE}━━━━━━━━━━━━━━━
   echo -e "${RE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${R}\n"; exit $STEP_ERR' ERR
 
 # ── Constants ─────────────────────────────────────────────────────────────────
-REPO_URL="https://github.com/nishaslam/NA-MD-Bot.git"
+REPO_URL="https://github.com/Nisha-Aslam1/NA-MD-Bot.git"
 REPO_CLONE_DIR="/home/ubuntu/NA-MD-Bot-repo"   # git clone yahan hoga
 NODE_VERSION="20"
 PM2_APP_NAME="na-md-bot"
