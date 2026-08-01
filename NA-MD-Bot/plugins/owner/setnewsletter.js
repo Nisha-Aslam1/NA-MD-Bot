@@ -18,7 +18,7 @@ export default {
     const jid = args[0]?.trim();
 
     if (!jid) {
-      const current = global._AA_NEWSLETTER_JID || db.settings.getValue('newsletterJid') || 'Not set';
+      const current = global._NA_NEWSLETTER_JID || db.settings.getValue('newsletterJid') || 'Not set';
       return reply(
         `📢 *Newsletter JID Setup*\n\n` +
         `*Current JID:* \`${current}\`\n\n` +
@@ -43,8 +43,8 @@ export default {
 
     const name = args.length > 1 ? args.slice(1).join(' ') : 'NA MD Bot';
 
-    global._AA_NEWSLETTER_JID  = jid;
-    global._AA_NEWSLETTER_NAME = name;
+    global._NA_NEWSLETTER_JID  = jid;
+    global._NA_NEWSLETTER_NAME = name;
 
     // Persist so it survives bot restarts
     db.settings.setValue('newsletterJid', jid);

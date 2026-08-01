@@ -29,14 +29,14 @@ const CHANNEL_URL  = 'https://whatsapp.com/channel/0029Vb8Yk2LL2AU78HliE617';
 const CHANNEL_NAME = 'NA MD Bot';
 
 function getCtx() {
-  const newsletterJid = global._AA_NEWSLETTER_JID;
+  const newsletterJid = global._NA_NEWSLETTER_JID;
   if (newsletterJid) {
     return {
       forwardingScore: 999,
       isForwarded: true,
       forwardedNewsletterMessageInfo: {
         newsletterJid,
-        newsletterName: global._AA_NEWSLETTER_NAME || CHANNEL_NAME,
+        newsletterName: global._NA_NEWSLETTER_NAME || CHANNEL_NAME,
         serverMessageId: Math.floor(Math.random() * 99999) + 1,
       },
     };

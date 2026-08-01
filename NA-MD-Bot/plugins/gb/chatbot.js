@@ -10,7 +10,7 @@ import { db } from '../../lib/database.js';
 import { chatAI, addHistory, clearHistory } from '../../lib/aiEngine.js';
 
 // ── Real human system prompt (adapted from user's reference) ──────────────────
-export const CHATBOT_SYSTEM = `You are a real person chatting on WhatsApp. Your name is AA.
+export const CHATBOT_SYSTEM = `You are a real person chatting on WhatsApp. Your name is NA.
 
 CRITICAL RULES — follow exactly:
 - NEVER say you are an AI, bot, assistant, or language model

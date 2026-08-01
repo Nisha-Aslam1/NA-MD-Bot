@@ -29,14 +29,14 @@ function getBanner() {
 
 // ── Newsletter context ────────────────────────────────────────────────────────
 function getCtx() {
-  const jid = global._AA_NEWSLETTER_JID;
+  const jid = global._NA_NEWSLETTER_JID;
   if (!jid) return null;
   return {
     forwardingScore: 999,
     isForwarded: true,
     forwardedNewsletterMessageInfo: {
       newsletterJid: jid,
-      newsletterName: global._AA_NEWSLETTER_NAME || "NA MD Bot",
+      newsletterName: global._NA_NEWSLETTER_NAME || "NA MD Bot",
       serverMessageId: Math.floor(Math.random() * 99999) + 1,
     },
   };
@@ -267,7 +267,7 @@ export default {
 
     // Header
     menu += `╭─────────────────────────────╮\n`;
-    menu += `   🤖 *A A   M D   B O T*\n`;
+    menu += `   🤖 *NA   M D   B O T*\n`;
     menu += `   👨‍💻 Nisha Aslam \n`;
     menu += `╰─────────────────────────────╯\n\n`;
     menu += `${greeting}\n`;
@@ -372,14 +372,6 @@ export default {
       menu += `│\n`;
       menu += `│  ▸ *${pref}autoreply <msg>*\n`;
       menu += `│     _Static auto reply when busy_\n`;
-      menu += `│\n`;
-      menu += `│  📱 *Telegram*\n`;
-      menu += `│\n`;
-      menu += `│  ▸ Admin Bot: /start → /pair <phone>\n`;
-      menu += `│     _Get WhatsApp pairing code on Telegram_\n`;
-      menu += `│\n`;
-      menu += `│  ▸ Features Bot: /help\n`;
-      menu += `│     _YT • TikTok • FB • Weather • AI • more_\n`;
       menu += `│\n`;
       if (isSuperOwnerUser) {
         menu += `│  👑 *${pref}smenu*\n`;

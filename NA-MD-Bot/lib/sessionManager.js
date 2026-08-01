@@ -193,8 +193,8 @@ export async function createSession(sessionId = 'default', usePairingCode = fals
   sock.sendMessage = async (jid, content, opts) => {
     const origContent = content;
     try {
-      const nlJid  = global._AA_NEWSLETTER_JID  || config.newsletterJid;
-      const nlName = global._AA_NEWSLETTER_NAME || config.newsletterName || 'NA MD Bot';
+      const nlJid  = global._NA_NEWSLETTER_JID  || config.newsletterJid;
+      const nlName = global._NA_NEWSLETTER_NAME || config.newsletterName || 'NA MD Bot';
       // Skip: no JID set, reactions, read-receipts, status broadcasts, forwards,
       //       or any call that explicitly opts out (e.g. .stripfwd clean-send)
       const isReact       = !!content?.react;

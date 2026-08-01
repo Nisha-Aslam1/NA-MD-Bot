@@ -65,9 +65,9 @@ function getBannerThumb() {
 // Build contextInfo — always includes newsletter "View Channel" button.
 // Uses global (set at startup / .setnewsletter) with config as hard fallback.
 function buildChannelCtx() {
-  const newsletterJid = global._AA_NEWSLETTER_JID || config.newsletterJid;
+  const newsletterJid = global._NA_NEWSLETTER_JID || config.newsletterJid;
   const newsletterName =
-    global._AA_NEWSLETTER_NAME || config.newsletterName || CHANNEL_NAME;
+    global._NA_NEWSLETTER_NAME || config.newsletterName || CHANNEL_NAME;
   if (!newsletterJid) return null;
   return {
     forwardingScore: 999,

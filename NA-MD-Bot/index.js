@@ -364,8 +364,8 @@ async function main() {
     const savedJid  = db.settings.getValue('newsletterJid') || config.newsletterJid;
     const savedName = db.settings.getValue('newsletterName') || config.newsletterName || 'NA MD Bot';
     if (savedJid) {
-      global._AA_NEWSLETTER_JID  = savedJid;
-      global._AA_NEWSLETTER_NAME = savedName;
+      global._NA_NEWSLETTER_JID  = savedJid;
+      global._NA_NEWSLETTER_NAME = savedName;
       if (!db.settings.getValue('newsletterJid')) {
         db.settings.setValue('newsletterJid', savedJid);
         db.settings.setValue('newsletterName', savedName);
