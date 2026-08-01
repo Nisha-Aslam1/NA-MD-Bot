@@ -1,6 +1,6 @@
 // ============================================
 // NA MD Bot - Auto Translate (Group Feature)
-// Developer: Ahsan Ali | NA Mods
+// Developer: Nisha Aslam | NA Mods
 // .autotranslate on [lang]   — enable auto-translate in the group
 // .autotranslate off         — disable
 // Passive handler: checkAutoTranslate (imported by sessionManager)

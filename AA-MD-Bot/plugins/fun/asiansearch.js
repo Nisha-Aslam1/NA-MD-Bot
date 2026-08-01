@@ -1,6 +1,6 @@
 // ============================================
 // NA MD Bot — Asian Content Search 🔞
-// Developer: Ahsan Ali | NA Mods
+// Developer: Nisha Aslam | NA Mods
 //
 // Uses DC /xxx/xvideos API (42k+ asian results)
 // Sends preview.mp4 clip (~130KB, publicly accessible)

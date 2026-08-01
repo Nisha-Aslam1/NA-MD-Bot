@@ -65,7 +65,7 @@ export default {
       for await (const chunk of stream) chunks.push(chunk);
       const buffer = Buffer.concat(chunks);
 
-      const filename = `aamdbot_${Date.now()}${info.ext}`;
+      const filename = `namdbot_${Date.now()}${info.ext}`;
       const url = await uploadToCatbox(buffer, filename);
 
       const sizeStr = buffer.length < 1_048_576

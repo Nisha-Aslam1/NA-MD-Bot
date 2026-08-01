@@ -1,6 +1,6 @@
 // ============================================
 // NA MD Bot - SoundCloud Downloader
-// Developer: Ahsan Ali | NA Mods
+// Developer: Nisha Aslam | NA Mods
 //
 // Commands:
 //   .sc <search query or URL>   — search & download from SoundCloud

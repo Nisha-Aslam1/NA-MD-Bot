@@ -1,6 +1,6 @@
 // ============================================
 // NA MD Bot - AI Virtual Girlfriend (.gf)
-// Developer: Ahsan Ali | NA Mods
+// Developer: Nisha Aslam | NA Mods
 //
 // Commands:
 //   .gf <message>       — chat with your AI girlfriend

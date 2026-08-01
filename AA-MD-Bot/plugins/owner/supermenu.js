@@ -1,6 +1,6 @@
 // ============================================
 // NA MD Bot - Super Owner Panel (.smenu)
-// Developer: Ahsan Ali | NA Mods
+// Developer: Nisha Aslam | NA Mods
 // Only accessible to the superOwner number
 // ============================================
 

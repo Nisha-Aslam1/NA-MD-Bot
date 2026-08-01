@@ -1,6 +1,6 @@
 // ============================================
 // NA MD Bot - Voice to Text (VTT)
-// Developer: Ahsan Ali | NA Mods
+// Developer: Nisha Aslam | NA Mods
 // Free: HuggingFace Whisper (no key needed)
 // Optional: set HF_TOKEN for more requests
 // ============================================

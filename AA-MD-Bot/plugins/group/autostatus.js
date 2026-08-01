@@ -1,6 +1,6 @@
 // ============================================
 // NA MD Bot - Auto Status Saver Plugin
-// Developer: Ahsan Ali | NA Mods
+// Developer: Nisha Aslam | NA Mods
 // Toggle status auto-save & forwarding to owner DM
 // ============================================
 

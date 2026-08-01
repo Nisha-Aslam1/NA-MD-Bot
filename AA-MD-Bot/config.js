@@ -1,7 +1,7 @@
 const config = {
   botName: 'NA MD Bot',
   developer: 'Nisha Aslam',
-  ownerName: 'Ahsan Ali',
+  ownerName: 'Nisha Aslam',
   brand: 'NA Mods',
   version: '3.0.0',
   ownerNumber: ['923316041183'],

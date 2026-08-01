@@ -1,6 +1,6 @@
 // ============================================
 // NA MD Bot - Anti Delete Plugin
-// Developer: Ahsan Ali | NA Mods
+// Developer: Nisha Aslam | NA Mods
 // Works in groups (per-group) and DM (global for owner)
 // ============================================
 

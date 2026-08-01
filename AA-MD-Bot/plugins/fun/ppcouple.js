@@ -1,6 +1,6 @@
 // ============================================
 // NA MD Bot - Anime Couple PP
-// Developer: Ahsan Ali | NA Mods
+// Developer: Nisha Aslam | NA Mods
 //
 // Commands:
 //   .ppcouple — random anime couple (boy + girl)

@@ -1,4 +1,4 @@
-# AA MD Bot
+# NA MD Bot
 
 A production-ready multi-device WhatsApp bot with 226 plugins, multi-session support, media processing, and full owner/sudo control. Persistent bot data and WhatsApp authentication state are stored in MongoDB.
 
@@ -27,11 +27,13 @@ A production-ready multi-device WhatsApp bot with 226 plugins, multi-session sup
 - `AA-MD-Bot/session/` — runtime directory; auth is stored in MongoDB
 - `AA-MD-Bot/dashboard.html` — web dashboard UI
 
+*(Note: folder is still named AA-MD-Bot on Replit — renaming would break the workflow)*
+
 ## Plugin categories
 
 admin, download, search, fun, gb, group, owner, islamic, media, tools, and utility
 
-## Configuration (`AA-MD-Bot/config.js`)
+## Configuration (`AA-MD-Bot/config.js`)  <!-- NA MD Bot -->
 
 - **Owner number**: `ownerNumber` — set your WhatsApp number here for owner commands
 - **Prefixes**: `.`, `!`, `#` by default
@@ -42,9 +44,9 @@ admin, download, search, fun, gb, group, owner, islamic, media, tools, and utili
 
 ## User preferences
 
-- Bot name: AA MD Bot
-- Developer: Ahsan Ali Wadani
-- Brand: AA Mods
+- Bot name: NA MD Bot
+- Developer: Nisha Aslam
+- Brand: NA Mods
 - Default prefix: `.`
 
 ## Gotchas

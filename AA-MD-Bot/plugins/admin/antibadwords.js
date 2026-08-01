@@ -1,6 +1,6 @@
 // ============================================
 // NA MD Bot - Anti Bad Words (Group)
-// Developer: Ahsan Ali | NA Mods
+// Developer: Nisha Aslam | NA Mods
 // ============================================
 
 import { db } from '../../lib/database.js';

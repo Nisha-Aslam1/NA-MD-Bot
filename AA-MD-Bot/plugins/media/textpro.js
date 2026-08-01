@@ -37,7 +37,7 @@ export default {
         `• gradient • dropwater • cloud • pixel • underwater\n\n` +
         `*Usage:*\n` +
         `• *${prefix}textpro* HELLO\n` +
-        `• *${prefix}textpro* neon | AA MD BOT\n` +
+        `• *${prefix}textpro* neon | NA MD BOT\n` +
         `• *${prefix}textpro* fire GAMER\n\n` +
         `> 🤖 *NA MD Bot*`
       );

@@ -1,6 +1,6 @@
 // ============================================
 // NA MD Bot - Member Report System
-// Developer: Ahsan Ali | NA Mods
+// Developer: Nisha Aslam | NA Mods
 // .report @user <reason>  — report a member to admins
 // .reports                — view pending reports (admin only)
 // .clearreports           — clear all reports (admin only)

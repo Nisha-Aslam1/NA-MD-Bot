@@ -1,6 +1,6 @@
 // ============================================
 // NA MD Bot - Link Preview
-// Developer: Ahsan Ali | NA Mods
+// Developer: Nisha Aslam | NA Mods
 // Kisi bhi URL ka title/desc/image dikhao
 // ============================================
 

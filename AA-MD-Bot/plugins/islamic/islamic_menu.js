@@ -1,6 +1,6 @@
 // ============================================
 // NA MD Bot - Islamic Menu Plugin
-// Developer: Ahsan Ali | NA Mods
+// Developer: Nisha Aslam | NA Mods
 // ============================================
 
 import { plugins } from '../../lib/pluginLoader.js';

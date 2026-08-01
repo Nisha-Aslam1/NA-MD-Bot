@@ -1,6 +1,6 @@
 // ============================================
 // NA MD Bot - Report & Support Plugin
-// Developer: Ahsan Ali | NA Mods
+// Developer: Nisha Aslam | NA Mods
 // ============================================
 
 import config from '../../config.js';

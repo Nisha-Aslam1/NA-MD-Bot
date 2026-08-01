@@ -1,6 +1,6 @@
 // ============================================
 // NA MD Bot - Notes System (Firebase-backed)
-// Developer: Ahsan Ali | NA Mods
+// Developer: Nisha Aslam | NA Mods
 // All notes stored in Firebase RTDB via db.notes
 // — zero local file writes.
 // ============================================

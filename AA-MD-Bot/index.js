@@ -80,7 +80,7 @@ function stripApi(p) { return p.replace(/^\/api/, '') || '/'; }
 function printBanner() {
   console.log(chalk.cyan.bold(`
 ╔══════════════════════════════════════╗
-║       AA MD BOT  v${config.version}           ║
+║       NA MD BOT  v${config.version}           ║
 ║   Developer: Nisha Aslam       ║
 ║        Brand: NA Mods               ║
 ║   Multi-Device WhatsApp Bot         ║

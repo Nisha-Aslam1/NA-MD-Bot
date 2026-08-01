@@ -1,6 +1,6 @@
 // ============================================
 // NA MD Bot - Image to Text (OCR)
-// Developer: Ahsan Ali | NA Mods
+// Developer: Nisha Aslam | NA Mods
 // Free: OCR.Space API (no signup needed)
 // Optional: set OCR_SPACE_KEY for more limits
 // ============================================

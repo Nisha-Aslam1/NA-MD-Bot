@@ -1,6 +1,6 @@
 // ============================================
 // NA MD Bot - Anti View Once
-// Developer: Ahsan Ali | NA Mods
+// Developer: Nisha Aslam | NA Mods
 // Captures view-once media, stores for manual reveal
 // via !reveal <msgId>, and auto-reveals to owner's
 // private "You" chat when antiviewonce is ON or the

@@ -1,6 +1,6 @@
 // ============================================
 // NA MD Bot - Horoscope / Zodiac
-// Developer: Ahsan Ali | NA Mods
+// Developer: Nisha Aslam | NA Mods
 // ============================================
 
 import axios from 'axios';

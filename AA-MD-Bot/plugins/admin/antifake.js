@@ -1,6 +1,6 @@
 // ============================================
 // NA MD Bot - Anti Fake Numbers (Group)
-// Developer: Ahsan Ali | NA Mods
+// Developer: Nisha Aslam | NA Mods
 // ============================================
 
 import { db } from '../../lib/database.js';
