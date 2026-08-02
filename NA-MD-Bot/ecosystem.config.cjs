@@ -22,7 +22,7 @@ module.exports = {
     {
       name        : 'na-md-bot',
       script: 'index.js',
-      cwd: path.join(__dirname, 'NA-MD-Bot'),
+      cwd: __dirname,
       interpreter : 'node',
       node_args   : '--experimental-vm-modules',
 
