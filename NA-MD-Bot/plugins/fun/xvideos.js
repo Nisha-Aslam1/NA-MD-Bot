@@ -1,211 +1,201 @@
 // ============================================
-// NA MD Bot — XVideos Search & Download 🔞
+// NA MD Bot — XVideos + XNXX Search & Download 🔞
 // Developer: Nisha Aslam
 //
 // SELF-CHAT ONLY — works only in owner's "You" chat
-// Search via DC /xxx/xvideos API
-// Download via direct HTML scraping (proven working from Replit)
-// Commands: .xv  .xvideos  .xvid  .xvideo
+// Sources: DC xvideos API + DC xnxx API
+// Strategy: try CDN preview clips across ALL results (no yt-dlp)
+//           fallback to cover thumbnail image
 // ============================================
 
-import axios from 'axios';
-import fs from 'fs-extra';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import { generateId } from '../../lib/helper.js';
+import axios from "axios";
+const DC = "https://apis.davidcyriltech.my.id";
+const UA =
+  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36";
+const FOOTER = "\n\n> 🔞 *NA MD Bot* • 👨‍💻 *Nisha Aslam*";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const TEMP      = path.join(__dirname, '../../temp');
-const DC        = 'https://apis.davidcyriltech.my.id';
-const UA        = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
-const FOOTER    = '\n\n> 🔞 *NA MD Bot* •  👨‍💻 *Nisha Aslam*';
-const MAX_BYTES = 45 * 1024 * 1024; // 45 MB
+// ── Search both APIs ────────────────────────────────────────────────────────
+async function searchVideos(query) {
+  const [xvRes, xnRes] = await Promise.allSettled([
+    axios.get(`${DC}/xxx/xvideos`, {
+      params: { q: query },
+      headers: { "User-Agent": UA },
+      timeout: 15000,
+    }),
+    axios.get(`${DC}/xxx/xnxx`, {
+      params: { q: query },
+      headers: { "User-Agent": UA },
+      timeout: 15000,
+    }),
+  ]);
 
-// ── Extract direct MP4 URL from XVideos page HTML ──────────────────────────
-// XVideos embeds the video URL in JavaScript on the page.
-async function getDirectVideoUrl(pageUrl) {
-  const html = await axios.get(pageUrl, {
-    headers: {
-      'User-Agent': UA,
-      'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-      'Accept-Language': 'en-US,en;q=0.9',
-      'Referer': 'https://www.xvideos.com/',
-    },
-    timeout: 25000,
-  }).then(r => r.data);
+  const xvResults =
+    xvRes.status === "fulfilled"
+      ? (
+          xvRes.value.data?.data?.results ||
+          xvRes.value.data?.results ||
+          []
+        ).map((r) => ({
+          ...r,
+          _src: "xvideos",
+          previewUrl: r.thumbnail?.preview || null,
+          coverUrl: r.thumbnail?.cover || null,
+          pageUrl: r.url || r.link || "",
+        }))
+      : [];
 
-  // Try highest quality first, then fall to lower
-  const patterns = [
-    /html5player\.setVideoUrl1080p\('([^']+)'\)/,
-    /html5player\.setVideoUrl720p\('([^']+)'\)/,
-    /html5player\.setVideoUrlHigh\('([^']+)'\)/,
-    /html5player\.setVideoUrlLow\('([^']+)'\)/,
-    /html5player\.setVideoUrl\('([^']+)'\)/,
-    /"videoUrl":"([^"]+\.mp4[^"]*)"/,
-    /setVideoHLS_cdn\('([^']+)'\)/,
+  const xnResults =
+    xnRes.status === "fulfilled"
+      ? (
+          xnRes.value.data?.data?.results ||
+          xnRes.value.data?.results ||
+          []
+        ).map((r) => ({
+          ...r,
+          _src: "xnxx",
+          previewUrl: r.thumbnail?.preview || null,
+          coverUrl: r.thumbnail?.cover || null,
+          pageUrl: r.url || r.link || "",
+        }))
+      : [];
+
+  // Interleave both — previews first
+  const all = [...xvResults, ...xnResults];
+  return [
+    ...all.filter((r) => r.previewUrl),
+    ...all.filter((r) => !r.previewUrl),
   ];
+}
 
-  for (const re of patterns) {
-    const m = html.match(re);
-    if (m && m[1] && m[1].startsWith('http')) return m[1];
-  }
-  throw new Error('Could not extract video URL from page');
+// ── Download CDN preview clip ────────────────────────────────────────────────
+async function fetchPreview(previewUrl, referer) {
+  const res = await axios.get(previewUrl, {
+    responseType: "arraybuffer",
+    headers: {
+      "User-Agent": UA,
+      Referer: referer,
+      Origin: new URL(referer).origin,
+    },
+    timeout: 45000,
+    maxContentLength: 40 * 1024 * 1024,
+  });
+  const buf = Buffer.from(res.data);
+  if (buf.length < 10000) throw new Error("clip too small");
+  return buf;
+}
+
+// ── Download cover image ─────────────────────────────────────────────────────
+async function fetchCover(coverUrl, referer) {
+  const res = await axios.get(coverUrl, {
+    responseType: "arraybuffer",
+    headers: { "User-Agent": UA, Referer: referer },
+    timeout: 15000,
+  });
+  const buf = Buffer.from(res.data);
+  if (buf.length < 1000) throw new Error("image too small");
+  return buf;
+}
+
+function makeCaption(r, query) {
+  const src = r._src === "xnxx" ? "XNXX" : "XVideos";
+  const title = (r.title || query).slice(0, 100);
+  const views = r.views || "";
+  const duration = r.duration || "";
+  const rating = r.rating || "";
+  return (
+    `🔞 *${src}*\n\n🎬 *${title}*\n` +
+    (views ? `👁️ ${views}   ` : "") +
+    (duration ? `⏱️ ${duration}   ` : "") +
+    (rating ? `⭐ ${rating}` : "") +
+    `\n🔗 ${r.pageUrl}${FOOTER}`
+  );
 }
 
 export default {
-  command:     'xv',
-  alias:       ['xvideos', 'xvid', 'xvideo'],
-  description: 'Search & send adult video from XVideos 🔞',
-  category:    'fun',
-  usage:       '.xv <search term>',
+  command: "xv",
+  alias: ["xvideos", "xvid", "xvideo", "xnxx", "pornvideo", "pv"],
+  description: "Search & send adult video (XVideos + XNXX) 🔞",
+  category: "fun",
+  usage: ".xv <search term>",
 
   async execute({ sock, msg, jid, text, react, reply, prefix, fromMe }) {
-    // ── Self-chat only ────────────────────────────────────────────────────────
-    if (!fromMe) return;   // silently ignore — only works in owner's "You" chat
+    if (!fromMe) return;
 
-    const query = (text || '').trim();
-
+    const query = (text || "").trim();
     if (!query) {
       return reply(
-        `🔞 *XVideos Downloader*\n\n` +
-        `*Usage:* ${prefix}xv <search>\n` +
-        `*Examples:*\n` +
-        `▸ ${prefix}xv asian\n` +
-        `▸ ${prefix}xv cute\n` +
-        `▸ ${prefix}xv romantic\n\n` +
-        `⚠️ _Adult content — 18+ only_${FOOTER}`
+        `🔞 *Adult Video Search*\n\n` +
+          `*Usage:* ${prefix}xv <search>\n\n` +
+          `*Sources:* XVideos + XNXX\n\n` +
+          `*Examples:*\n▸ ${prefix}xv asian\n▸ ${prefix}xv romantic\n▸ ${prefix}xv cute girl\n\n` +
+          `⚠️ _18+ only — self chat only_${FOOTER}`,
       );
     }
 
-    await react('🔞');
-    let tmpFile = null;
+    await react("🔞");
 
     try {
-      await reply(`🔍 _Searching XVideos for "${query}"..._`);
+      await reply(`🔍 _Searching XVideos + XNXX for "${query}"..._`);
+      const results = await searchVideos(query);
+      if (!results.length) throw new Error(`No results found for "${query}"`);
 
-      // ── 1. Search via DC API ────────────────────────────────────────────────
-      let list = [];
-      try {
-        const { data: apiRes } = await axios.get(`${DC}/xxx/xvideos`, {
-          params:  { q: query },
-          headers: { 'User-Agent': UA },
-          timeout: 20000,
-        });
-        const results = apiRes?.data?.results || apiRes?.results || apiRes?.data || [];
-        list = Array.isArray(results) ? results : [];
-      } catch (e) {
-        console.error('[xv] DC API failed:', e.message);
-      }
+      const pool = results.slice(0, 20);
+      // Shuffle top results for variety
+      const shuffled = pool.sort(() => Math.random() - 0.5);
 
-      if (!list.length) throw new Error(`No results found for: "${query}"`);
-
-      // ── 2. Pick a result + extract MP4 URL (retry up to 3 candidates) ───────
-      const candidates = list.slice(0, Math.min(list.length, 10));
-      // Shuffle a bit — pick from random positions but ensure we have retry candidates
-      const startIdx = Math.floor(Math.random() * Math.max(1, candidates.length - 2));
-      const tryOrder = [
-        candidates[startIdx],
-        candidates[(startIdx + 1) % candidates.length],
-        candidates[(startIdx + 2) % candidates.length],
-      ].filter(Boolean);
-
-      let directUrl = null;
-      let pick      = null;
-
-      for (const candidate of tryOrder) {
-        const pageUrl = candidate.url || candidate.link;
-        if (!pageUrl) continue;
+      // ── Try CDN preview clips across multiple results ─────────────────────
+      for (const r of shuffled.filter((r) => r.previewUrl)) {
+        const referer =
+          r._src === "xnxx"
+            ? "https://www.xnxx.com/"
+            : "https://www.xvideos.com/";
         try {
-          directUrl = await getDirectVideoUrl(pageUrl);
-          pick      = candidate;
-          break;
-        } catch (e) {
-          console.error(`[xv] URL extraction failed for ${pageUrl}:`, e.message);
-        }
+          await react("📥");
+          const buf = await fetchPreview(r.previewUrl, referer);
+          await sock.sendMessage(
+            jid,
+            {
+              video: buf,
+              mimetype: "video/mp4",
+              caption: makeCaption(r, query),
+            },
+            { quoted: msg },
+          );
+          return await react("✅");
+        } catch {}
       }
 
-      if (!directUrl || !pick) throw new Error('Could not extract video URL — try a different search term');
-
-      const videoPageUrl = pick.url || pick.link;
-      const title        = pick.title || query;
-      const duration     = pick.duration || '';
-      const views        = pick.views || '';
-      const thumb = typeof pick.thumbnail === 'object'
-        ? (pick.thumbnail?.cover || pick.thumbnail?.preview)
-        : (pick.thumbnail || null);
-
-      await reply(`📥 _Downloading: ${title.slice(0, 60)}…_\n_Please wait 30–60 seconds._`);
-
-      // ── 3. Download video buffer ────────────────────────────────────────────
-      fs.ensureDirSync(TEMP);
-      const id = generateId();
-      tmpFile  = path.join(TEMP, `xv_${id}.mp4`);
-
-      const videoRes = await axios.get(directUrl, {
-        responseType: 'stream',
-        headers: {
-          'User-Agent': UA,
-          'Referer': 'https://www.xvideos.com/',
-        },
-        timeout: 120000,
-        maxContentLength: MAX_BYTES + 1,
-      });
-
-      const writer = fs.createWriteStream(tmpFile);
-      await new Promise((resolve, reject) => {
-        videoRes.data.pipe(writer);
-        writer.on('finish', resolve);
-        writer.on('error', reject);
-        videoRes.data.on('error', reject);
-      });
-
-      if (!fs.existsSync(tmpFile)) throw new Error('Download failed — file not created');
-      const stat = fs.statSync(tmpFile);
-      if (stat.size > MAX_BYTES)
-        throw new Error(`Video too large (${Math.round(stat.size / 1024 / 1024)} MB). Try another search.`);
-      if (stat.size < 10000)
-        throw new Error('Download failed — file too small (corrupted)');
-
-      const buf = await fs.readFile(tmpFile);
-
-      // ── 4. Send video ────────────────────────────────────────────────────────
-      const caption =
-        `🔞 *XVideos*\n\n` +
-        `🎬 *${title.slice(0, 100)}*\n` +
-        (views    ? `👁️ ${views}   ` : '') +
-        (duration ? `⏱️ ${duration}\n` : '\n') +
-        `🔗 ${videoPageUrl}${FOOTER}`;
-
-      await sock.sendMessage(jid, {
-        video:    buf,
-        mimetype: 'video/mp4',
-        fileName: `xvideos_${id}.mp4`,
-        caption,
-        ...(thumb ? {
-          contextInfo: {
-            externalAdReply: {
-              title:                 title.slice(0, 80),
-              body:                  views ? `${views} views` : 'XVideos',
-              thumbnailUrl:          thumb,
-              sourceUrl:             videoPageUrl,
-              mediaType:             2,
-              renderLargerThumbnail: true,
+      // ── All previews failed — try cover image ─────────────────────────────
+      for (const r of shuffled.filter((r) => r.coverUrl)) {
+        const referer =
+          r._src === "xnxx"
+            ? "https://www.xnxx.com/"
+            : "https://www.xvideos.com/";
+        try {
+          const buf = await fetchCover(r.coverUrl, referer);
+          await sock.sendMessage(
+            jid,
+            {
+              image: buf,
+              caption:
+                makeCaption(r, query) +
+                "\n\n_⚠️ Preview clip unavailable — thumbnail shown_",
             },
-          },
-        } : {}),
-      }, { quoted: msg });
+            { quoted: msg },
+          );
+          return await react("✅");
+        } catch {}
+      }
 
-      await react('✅');
-
-    } catch (err) {
-      await react('❌');
-      const errMsg = (err.message || 'Unknown error').slice(0, 150);
-      await reply(
-        `❌ *XVideos Failed*\n\n_${errMsg}_\n\n` +
-        `💡 *Tips:*\n▸ Try simpler keywords\n▸ Try again in a moment${FOOTER}`
+      throw new Error(
+        "Could not fetch any media — all CDN links blocked. Try different keywords.",
       );
-    } finally {
-      if (tmpFile) fs.remove(tmpFile).catch(() => {});
+    } catch (err) {
+      await react("❌");
+      await reply(
+        `❌ *Search Failed*\n\n_${(err.message || "Unknown error").slice(0, 200)}_\n\n` +
+          `💡 *Tips:*\n▸ Try simpler keywords (e.g. "cute" "asian" "hot")\n▸ Try again in a moment${FOOTER}`,
+      );
     }
   },
 };
