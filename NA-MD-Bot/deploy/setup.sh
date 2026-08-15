@@ -89,16 +89,18 @@ sudo DEBIAN_FRONTEND=noninteractive apt-get upgrade -yq \
 ok "System packages updated"
 
 # ══════════════════════════════════════════════════════════════════════════════
+# ══════════════════════════════════════════════════════════════════════════════
 # STEP 2 — Essential System Tools
 # ══════════════════════════════════════════════════════════════════════════════
 hdr "2. System Tools"
+
 sudo DEBIAN_FRONTEND=noninteractive apt-get install -yq \
   ffmpeg curl wget git unzip gnupg \
   build-essential ca-certificates openssl \
   nginx certbot python3-certbot-nginx \
-  iptables-persistent netfilter-persistent \
   software-properties-common apt-transport-https
-ok "System tools + nginx + certbot + iptables-persistent ready"
+
+ok "System tools + nginx + certbot ready"
 
 # ══════════════════════════════════════════════════════════════════════════════
 # STEP 3 — MongoDB 7 (ARM64-compatible, localhost only)
@@ -845,63 +847,28 @@ ECOSYSTEM
 ok "ecosystem.config.cjs written ($(wc -l < "$ECOSYSTEM_FILE") lines)"
 
 # ══════════════════════════════════════════════════════════════════════════════
-# STEP 16 — Oracle Cloud iptables Fix
-# Oracle images have a REJECT rule that blocks ports 80/443/5000
-# We detect the REJECT line number and insert ACCEPT rules BEFORE it
 # ══════════════════════════════════════════════════════════════════════════════
-hdr "16. Oracle Cloud iptables Fix"
+# STEP 16 — AWS Firewall
+# AWS Security Group handles inbound firewall rules
+# ══════════════════════════════════════════════════════════════════════════════
+hdr "16. AWS Firewall"
 
-_iptables_allow_port() {
-  local PORT="$1" PROTO="${2:-tcp}"
-  # Check if ACCEPT rule already exists
-  if sudo iptables -C INPUT -p "$PROTO" --dport "$PORT" -j ACCEPT &>/dev/null; then
-    inf "iptables: port $PORT already ACCEPT — skip"
-    return
-  fi
+inf "AWS Security Group firewall handle kar raha hai"
+inf "Required ports: SSH(22), HTTP(80), HTTPS(443), Dashboard(5000)"
+inf "MongoDB(27017) internet ke liye open nahi hai"
 
-  # Find the REJECT rule line number (insert BEFORE it)
-  # || true : grep exits 1 when no match — under set -Eeuo pipefail this kills the script
-  REJECT_LINE=$(sudo iptables -L INPUT --line-numbers -n 2>/dev/null \
-    | grep -E '\bREJECT\b' | awk '{print $1}' | head -1 || true)
-
-  if [ -n "$REJECT_LINE" ]; then
-    # Insert ACCEPT before REJECT
-    sudo iptables -I INPUT "$REJECT_LINE" -p "$PROTO" --dport "$PORT" -j ACCEPT
-    ok "iptables: port $PORT ($PROTO) ACCEPT inserted before REJECT (line $REJECT_LINE)"
-  else
-    # No REJECT rule — just append
-    sudo iptables -A INPUT -p "$PROTO" --dport "$PORT" -j ACCEPT
-    ok "iptables: port $PORT ($PROTO) ACCEPT appended"
-  fi
-}
-
-_iptables_allow_port 22  tcp   # SSH
-_iptables_allow_port 80  tcp   # HTTP
-_iptables_allow_port 443 tcp   # HTTPS
-_iptables_allow_port 5000 tcp  # Dashboard
-
-# Save iptables rules permanently
-inf "iptables rules save ho rahi hain (netfilter-persistent)..."
-sudo netfilter-persistent save >/dev/null 2>&1 \
-  || { sudo iptables-save | sudo tee /etc/iptables/rules.v4 > /dev/null; \
-       ok "iptables rules saved to /etc/iptables/rules.v4"; }
-ok "iptables rules permanently saved"
+ok "AWS Security Group firewall configuration complete"
 
 # ══════════════════════════════════════════════════════════════════════════════
-# STEP 17 — UFW Firewall
-# Allow SSH/HTTP/HTTPS/5000, block MongoDB from internet
 # ══════════════════════════════════════════════════════════════════════════════
-hdr "17. UFW Firewall"
-sudo ufw --force reset >/dev/null 2>&1 || true  # fresh start
-sudo ufw default deny incoming  >/dev/null
-sudo ufw default allow outgoing >/dev/null
-sudo ufw allow 22/tcp   comment 'SSH'             >/dev/null
-sudo ufw allow 80/tcp   comment 'HTTP'            >/dev/null
-sudo ufw allow 443/tcp  comment 'HTTPS'           >/dev/null
-sudo ufw allow 5000/tcp comment 'NA-MD-Bot dashboard' >/dev/null
-# Port 27017 (MongoDB) is intentionally NOT opened — localhost only
-sudo ufw --force enable >/dev/null
-ok "UFW: SSH(22) HTTP(80) HTTPS(443) Dashboard(5000) open | MongoDB(27017) blocked"
+# STEP 17 — Firewall
+# AWS Security Group handles inbound firewall rules
+# ══════════════════════════════════════════════════════════════════════════════
+hdr "17. AWS Firewall"
+
+inf "AWS Security Group firewall handle kar raha hai — UFW skip"
+
+ok "AWS firewall configuration complete — UFW skipped"
 
 # ══════════════════════════════════════════════════════════════════════════════
 # STEP 18 — Nginx Configuration (fully idempotent, assumes nothing exists)
