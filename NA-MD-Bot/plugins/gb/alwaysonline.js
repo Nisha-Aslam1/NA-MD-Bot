@@ -34,7 +34,7 @@ export default {
         `⚠️ *Per number:* Only applies to this connected number.\n\n` +
         `━━━━━━━━━━━━━━━━\n` +
         `▸ *.alwaysonline on*  — Always appear online\n` +
-        `▸ *.alwaysonline off* — Normal online status\n\n` +
+        `▸ *.alwaysonline off* — Normal status — bot will not force online\n\n` +
         `⚠️ Note: Ghost Mode & Always Online cannot be active together.\n\n` +
         `> 🤖 *Powered by NA MD Bot*`
       );
@@ -67,7 +67,7 @@ export default {
       try { await sock.sendPresenceUpdate('unavailable'); } catch {}
       return reply(
         `⚫ *Always Online* is now *OFF ❌*\n\n` +
-        `This number's online status is back to normal.\n\n` +
+        `Bot will stop forcing this number online. Your number will only show online when you open WhatsApp yourself.\n\n` +
         `> 🤖 *Powered by NA MD Bot*`
       );
     }

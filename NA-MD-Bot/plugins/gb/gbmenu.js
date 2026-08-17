@@ -21,7 +21,7 @@ export default {
       `│     Appear offline while bot stays active\n` +
       `│\n` +
       `│  ▸ *${p}alwaysonline on/off*\n` +
-      `│     Always appear online\n` +
+      `│     Always appear online only when ON\n` +
       `│\n` +
       `│  ▸ *${p}privacy*\n` +
       `│     Control last seen, profile pic,\n` +

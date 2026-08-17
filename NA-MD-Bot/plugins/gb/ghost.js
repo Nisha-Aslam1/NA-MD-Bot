@@ -32,7 +32,7 @@ export default {
     sessionSettings.set('ghostMode', val);
 
     if (val) {
-      // Stop always-online interval for this session if running
+      // Stop always-online interval for this session if running.
       sessionSettings.set('alwaysOnline', false);
       try {
         const { stopAlwaysOnline } = await import('./alwaysonline.js');
@@ -47,8 +47,8 @@ export default {
     return reply(
       `👻 *Ghost Mode* is now *${val ? 'ON ✅' : 'OFF ❌'}*\n\n` +
       (val
-        ? `This number is now *invisible* 🕵️\nActive but appears offline to everyone.\nAlways Online has been stopped.`
-        : `This number is now *visible* 👁️\nOnline status will show normally.`)
+        ? `This number is now *invisible* 🕵️\nActive but appears offline to everyone.\n`
+        : `Ghost Mode is off. Bot activity still stays offline unless Always Online is ON.`)
     );
   },
 };
