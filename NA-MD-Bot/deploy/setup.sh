@@ -259,7 +259,7 @@ for _candidate in \
 done
 if [ -n "$_existing_env" ]; then
   _existing_uri=$(sed -n 's/^MONGODB_URI=//p' "$_existing_env" | head -1)
-  if [[ "$_existing_uri" =~ ^mongodb://aa_bot_user:([^@]+)@127\.0\.0\.1:27017/ ]] \
+  if [[ "$_existing_uri" =~ ^mongodb://na_bot_user:([^@]+)@127\.0\.0\.1:27017/ ]] \
      && [ "${BASH_REMATCH[1]}" != "PASSWORD" ]; then
     DB_PASS="${BASH_REMATCH[1]}"
     inf "Existing local MongoDB password preserved for safe rerun"
@@ -296,15 +296,15 @@ _MONGO_BASE="mongodb://127.0.0.1:27017"
 
 # Check if user exists: use exit code + output capture
 UCHECK=$(mongosh --quiet "${_MONGO_BASE}/na_md_bot" \
-  --eval "print(db.getUser('aa_bot_user') ? 'EXISTS' : 'MISSING')" 2>/dev/null || echo "MISSING")
+  --eval "print(db.getUser('na_bot_user') ? 'EXISTS' : 'MISSING')" 2>/dev/null || echo "MISSING")
 
 if echo "$UCHECK" | grep -q "EXISTS"; then
-  inf "User 'aa_bot_user' already exists — password update kar rahe hain..."
-  _UCMD="db.updateUser('aa_bot_user',{pwd:'${DB_PASS}',roles:[{role:'readWrite',db:'na_md_bot'}]})"
+  inf "User 'na_bot_user' already exists — password update kar rahe hain..."
+  _UCMD="db.updateUser('na_bot_user',{pwd:'${DB_PASS}',roles:[{role:'readWrite',db:'na_md_bot'}]})"
   _ULABEL="password updated"
 else
-  inf "User 'aa_bot_user' create kar rahe hain..."
-  _UCMD="db.createUser({user:'aa_bot_user',pwd:'${DB_PASS}',roles:[{role:'readWrite',db:'na_md_bot'}]})"
+  inf "User 'na_bot_user' create kar rahe hain..."
+  _UCMD="db.createUser({user:'na_bot_user',pwd:'${DB_PASS}',roles:[{role:'readWrite',db:'na_md_bot'}]})"
   _ULABEL="created"
 fi
 
@@ -312,7 +312,7 @@ fi
 _UTMP=$(mktemp)
 if mongosh --quiet "${_MONGO_BASE}/na_md_bot" --eval "$_UCMD" >"$_UTMP" 2>&1; then
   grep -v "^$" "$_UTMP" | while IFS= read -r l; do inf "  $l"; done || true
-  ok "MongoDB user 'aa_bot_user' ${_ULABEL}"
+  ok "MongoDB user 'na_bot_user' ${_ULABEL}"
 else
   # Show error output and fail
   warn "mongosh user operation failed — output:"
@@ -324,11 +324,11 @@ rm -f "$_UTMP"
 
 # ── Verify user was actually created (before re-enabling auth) ────────────────
 UVERIFY=$(mongosh --quiet "${_MONGO_BASE}/na_md_bot" \
-  --eval "print(db.getUser('aa_bot_user') ? 'OK' : 'MISSING')" 2>/dev/null || echo "MISSING")
+  --eval "print(db.getUser('na_bot_user') ? 'OK' : 'MISSING')" 2>/dev/null || echo "MISSING")
 if ! echo "$UVERIFY" | grep -q "OK"; then
   fail "User create hua hi nahi — MongoDB mein dobara check karo:\n  mongosh mongodb://127.0.0.1:27017/na_md_bot --eval \"db.getUsers()\""
 fi
-ok "User verification passed — 'aa_bot_user' exists in na_md_bot db"
+ok "User verification passed — 'na_bot_user' exists in na_md_bot db"
 
 # ── Re-enable auth + restart via systemd ─────────────────────────────────────
 inf "MongoDB auth re-enable kar rahe hain..."
@@ -346,9 +346,9 @@ _mongo_wait "mongodb://127.0.0.1:27017/admin" 15 "MongoDB (auth-on, restart)" \
 
 # ── Final: verify login with bot credentials ──────────────────────────────────
 inf "Bot credentials se login verify kar rahe hain..."
-_AUTH_URI="mongodb://aa_bot_user:${DB_PASS}@127.0.0.1:27017/na_md_bot?authSource=na_md_bot"
+_AUTH_URI="mongodb://na_bot_user:${DB_PASS}@127.0.0.1:27017/na_md_bot?authSource=na_md_bot"
 if _mongo_ping "$_AUTH_URI"; then
-  ok "MongoDB auth verified ✔ — 'aa_bot_user' login successful"
+  ok "MongoDB auth verified ✔ — 'na_bot_user' login successful"
 else
   # Show what mongosh says for diagnosis
   warn "Auth login fail — mongosh output:"
@@ -692,7 +692,7 @@ ok "IP=$PUBLIC_IP  DOMAIN=$DOMAIN"
 hdr "14. .env Configuration"
 
 # MongoDB URI — localhost, auth-enabled
-MONGODB_URI="mongodb://aa_bot_user:${DB_PASS}@127.0.0.1:27017/na_md_bot?authSource=na_md_bot"
+MONGODB_URI="mongodb://na_bot_user:${DB_PASS}@127.0.0.1:27017/na_md_bot?authSource=na_md_bot"
 
 # Helper: add a key=value to .env only if key doesn't already exist
 _env_merge() {
@@ -741,10 +741,10 @@ else
   # npm's prepare hook or a manual copy may have left the example placeholders
   # in place. Replace only those placeholders; preserve all real user values.
   # Logic: replace if URI is not already a real local URI
-  # (i.e. not matching mongodb://aa_bot_user:<realpass>@127.0.0.1:27017/...)
+  # (i.e. not matching mongodb://na_bot_user:<realpass>@127.0.0.1:27017/...)
   # Also replace if the password field is literally "PASSWORD" (example placeholder).
   _current_uri=$(sed -n 's/^MONGODB_URI=//p' "$ENV_FILE" | head -1)
-  if [[ "$_current_uri" != mongodb://aa_bot_user:*@127.0.0.1:27017/* ]] \
+  if [[ "$_current_uri" != mongodb://na_bot_user:*@127.0.0.1:27017/* ]] \
      || [[ "$_current_uri" == *:PASSWORD@* ]]; then
     sed -i "s#^MONGODB_URI=.*#MONGODB_URI=${MONGODB_URI}#" "$ENV_FILE"
     ok ".env: MONGODB_URI local URI se set kiya gaya (placeholder ya galat value replace hui)"
