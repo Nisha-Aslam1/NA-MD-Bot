@@ -42,6 +42,8 @@ import { initTelegramFeatures } from './lib/telegramFeatures.js';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const startTime = Date.now();
 const dashboardPath = path.join(__dirname, 'dashboard.html');
+const dashboardPassword = process.env.DASHBOARD_PASSWORD || '';
+const dashboardServerName = process.env.SERVER_ID || process.env.SERVER_NAME || process.env.DASHBOARD_SERVER_NAME || config.botName;
 
 // Flush pending MongoDB writes before crashing so no settings are lost.
 // flushAll is imported lazily to avoid circular import at module init time.
@@ -110,7 +112,7 @@ async function startServer() {
     if (url.pathname === '/api' || url.pathname === '/api/') {
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({
-        status: 'ok', bot: config.botName, version: config.version,
+        status: 'ok', bot: config.botName, serverName: dashboardServerName, version: config.version,
         uptime: formatDuration(Date.now() - startTime),
         sessions: getAllSessions().length, plugins: plugins.size,
       }));
@@ -136,6 +138,36 @@ async function startServer() {
       } catch {
         res.writeHead(500); res.end('Dashboard file missing');
       }
+      return;
+    }
+
+
+    // ── Dashboard config/login ────────────────────────────
+    if (p === '/dashboard-config') {
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({
+        authRequired: Boolean(dashboardPassword),
+        serverName: dashboardServerName,
+        bot: config.botName,
+        version: config.version,
+      }));
+      return;
+    }
+
+    if (p === '/dashboard-login' && req.method === 'POST') {
+      let body = '';
+      req.on('data', d => body += d);
+      req.on('end', () => {
+        try {
+          const { password = '' } = JSON.parse(body || '{}');
+          const ok = !dashboardPassword || password === dashboardPassword;
+          res.writeHead(ok ? 200 : 401, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ ok, serverName: dashboardServerName }));
+        } catch {
+          res.writeHead(400, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ ok: false, error: 'Invalid request body' }));
+        }
+      });
       return;
     }
 
@@ -188,7 +220,7 @@ async function startServer() {
     if (p === '/healthz' || p === '/health') {
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({
-        status: 'ok', bot: config.botName, version: config.version,
+        status: 'ok', bot: config.botName, serverName: dashboardServerName, version: config.version,
         uptime: formatDuration(Date.now() - startTime),
         sessions: getAllSessions().length, plugins: plugins.size,
       }));
@@ -212,6 +244,7 @@ async function startServer() {
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({
         uptime: formatDuration(Date.now() - startTime),
+        serverName: dashboardServerName,
         plugins: plugins.size,
         groups: Object.keys(db.groups.all()).length,
         sessions: safeSessions,
@@ -229,6 +262,7 @@ async function startServer() {
       res.end(JSON.stringify({
         status: 'online',
         bot: config.botName,
+        serverName: dashboardServerName,
         version: config.version,
         sessions: connected,
         maxSessions: null,
