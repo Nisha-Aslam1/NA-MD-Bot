@@ -99,6 +99,9 @@ pm2 restart na-md-bot
 
 | Variable | Kya karta hai |
 |---|---|
+| `DASHBOARD_PASSWORD` | Dashboard access password. Aap ka password: `(Nisha&aslam12:@)` |
+| `SERVER_ID` | Dashboard ke Servers tab mein current server ka display name, e.g. `server-1` |
+| `SERVER_NAME` | Legacy dashboard server display name fallback |
 | `TELEGRAM_BOT_TOKEN` | Admin/pairing Telegram bot |
 | `TELEGRAM_FEATURES_BOT_TOKEN` | Features mirror bot |
 | `OPENWEATHER_API_KEY` | `.weather` command |
