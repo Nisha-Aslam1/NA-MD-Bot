@@ -207,11 +207,13 @@ export default {
   category: "utility",
   usage: ".menu | .menu <category>",
 
-  async execute({ sock, jid, msg, isOwner, args, senderJid }) {
+  async execute({ sock, jid, msg, isOwner, args, senderJid, sessionSettings }) {
     const settings = db.settings.get();
     const pushName = msg.pushName || "User";
     const pref = config.prefix?.[0] ?? ".";
-    const mode = (settings.botMode ?? config.botMode ?? "public").toUpperCase();
+    const mode = (sessionSettings?.eff?.("botMode", "public") ?? settings.botMode ?? config.botMode ?? "public").toUpperCase();
+    const alwaysOnline = sessionSettings?.get?.("alwaysOnline") === true;
+    const presenceMode = alwaysOnline ? "🟢 Always Online" : "⚫ Bot Hidden";
     const isSuperOwnerUser =
       senderJid?.split("@")[0]?.split(":")[0] === String(config.superOwner);
     const role = isSuperOwnerUser
@@ -267,15 +269,17 @@ export default {
 
     // Header
     menu += `╭─────────────────────────────╮\n`;
-    menu += `   🤖 *NA   M D   B O T*\n`;
-    menu += `   👨‍💻 Nisha Aslam \n`;
+    menu += `│     🤖 *NA MD BOT*          │\n`;
+    menu += `│   👨‍💻 Nisha Aslam Edition   │\n`;
     menu += `╰─────────────────────────────╯\n\n`;
     menu += `${greeting}\n`;
 
     // Status bar
-    menu += `\n╭── 📊  *STATUS*\n`;
-    menu += `│  🟢 Online  •  ⏱️ ${uptime}  •  💾 ${usedMB}MB\n`;
-    menu += `│  Prefix: *${pref}*   Mode: *${mode}*   Role: ${role}\n`;
+    menu += `\n╭── 📊  *SESSION STATUS*\n`;
+    menu += `│  🤖 Bot: *Running*  •  ⏱️ ${uptime}\n`;
+    menu += `│  👁️ Presence: *${presenceMode}*\n`;
+    menu += `│  🔐 Mode: *${mode}*  •  Role: ${role}\n`;
+    menu += `│  🔑 Prefix: *${pref}*  •  💾 ${usedMB}MB\n`;
     menu += `│  📦 *${totalCmds}* commands loaded\n`;
     menu += `╰${"─".repeat(32)}\n`;
 
@@ -289,7 +293,7 @@ export default {
       menu += `│     _Appear offline to everyone_\n`;
       menu += `│\n`;
       menu += `│  ▸ *${pref}alwaysonline on/off*\n`;
-      menu += `│     _Always show online status_\n`;
+      menu += `│     _Force online only while ON_\n`;
       menu += `│\n`;
       menu += `│  ▸ *${pref}privacy*\n`;
       menu += `│     _Last seen, DP, blue ticks settings_\n`;
@@ -348,7 +352,7 @@ export default {
       menu += `│     _Full settings panel_\n`;
       menu += `│\n`;
       menu += `│  ▸ *${pref}mode public/private*\n`;
-      menu += `│     _Change bot access mode_\n`;
+      menu += `│     _Public/private mode (saved after restart)_\n`;
       menu += `│\n`;
       menu += `│  ▸ *${pref}setprefix <char>*\n`;
       menu += `│     _Change command prefix_\n`;
@@ -520,18 +524,6 @@ export default {
         menu += `│  _Aliases: ${pref}ppcp  ${pref}couplepp  ${pref}animepic_\n`;
         menu += `╰${"─".repeat(32)}\n`;
 
-        menu += `\n╭── 🔞  *ADULT CONTENT  (18+)*\n`;
-        menu += `│\n`;
-        menu += `│  ▸ *${pref}xv* <search>\n`;
-        menu += `│     _Search & download XVideos video_\n`;
-        menu += `│     _Aliases: ${pref}xvideos  ${pref}xvid  ${pref}xvideo_\n`;
-        menu += `│\n`;
-        menu += `│  ▸ *${pref}asian* <keyword>\n`;
-        menu += `│     _Asian content preview clip_\n`;
-        menu += `│     _Aliases: ${pref}asianvideo  ${pref}asiandl_\n`;
-        menu += `│\n`;
-        menu += `│  ⚠️ _Adults only. Use responsibly._\n`;
-        menu += `╰${"─".repeat(32)}\n`;
       }
     }
 

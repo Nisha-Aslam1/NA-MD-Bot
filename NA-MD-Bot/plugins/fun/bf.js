@@ -408,7 +408,7 @@ export default {
       ]);
     } catch (_) { /* handled below */ }
 
-    await sock.sendPresenceUpdate('available', jid).catch(() => {});
+    await sock.sendPresenceUpdate('unavailable', jid).catch(() => {});
 
     if (!aiReply) {
       await react('❌').catch(() => {});

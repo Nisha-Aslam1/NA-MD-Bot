@@ -60,9 +60,11 @@ export default {
   ownerOnly: true,
   usage: '.settings',
 
-  async execute({ sock, jid, msg }) {
+  async execute({ sock, jid, msg, sessionSettings }) {
     const s    = db.settings.get();
     const pref = (s.prefix ?? config.prefix)[0] ?? '.';
+    const mode = sessionSettings?.eff?.('botMode', 'public') ?? s.botMode ?? 'public';
+    const alwaysOnline = sessionSettings?.get?.('alwaysOnline') === true;
 
     const on  = '✅ ON ';
     const off = '❌ OFF';
@@ -74,7 +76,8 @@ export default {
       `${DIV}\n\n` +
 
       `📊 *CURRENT STATUS*\n${SDIV}\n` +
-      `🤖 Mode        : *${(s.botMode ?? 'public').toUpperCase()}*\n` +
+      `🤖 Mode        : *${mode.toUpperCase()}*  _(saved per number)_\n` +
+      `👁️ Presence    : *${alwaysOnline ? '🟢 Always Online' : '⚫ Bot Hidden'}*\n` +
       `🔑 Prefix      : *${pref}*\n` +
       `📞 Anti-Call   : ${bool(s.antiCall)}\n` +
       `🗑️ Anti-Delete : ${bool(s.antiDelete)}\n` +
@@ -87,7 +90,12 @@ export default {
 
       `🔀 *BOT MODE*\n${SDIV}\n` +
       `▸ *${pref}mode public*  — everyone can use\n` +
-      `▸ *${pref}mode private* — only you (self-chat)\n\n` +
+      `▸ *${pref}mode private* — owner only\n` +
+      `_Saved per connected number and restored after restart._\n\n` +
+
+      `👁️ *PRESENCE / ONLINE*\n${SDIV}\n` +
+      `▸ *${pref}alwaysonline on*  — force online all the time\n` +
+      `▸ *${pref}alwaysonline off* — bot stays hidden; phone shows online only when you open WhatsApp\n\n` +
 
       `🛡️ *PROTECTION*\n${SDIV}\n` +
       `▸ *${pref}anticall* on/off\n` +

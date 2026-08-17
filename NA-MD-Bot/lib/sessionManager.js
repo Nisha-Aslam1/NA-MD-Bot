@@ -184,6 +184,21 @@ export async function createSession(sessionId = 'default', usePairingCode = fals
   });
 
   sock.sessionId = sessionId;
+
+  // Privacy guard: bot-side activity must not make the linked WhatsApp
+  // number appear online. Normal bot presence (typing/recording/available) is
+  // suppressed to `unavailable`, but the owner-controlled Always Online feature
+  // can still explicitly opt this session into `available` until it is turned off.
+  const _origPresence = sock.sendPresenceUpdate?.bind(sock);
+  if (_origPresence) {
+    sock.sendPresenceUpdate = async (type, jid) => {
+      const alwaysOnline = db.sessionSettings.getValue(sessionId, 'alwaysOnline') === true;
+      if (type === 'available' && alwaysOnline) return _origPresence('available', jid);
+      if (type === 'unavailable') return _origPresence('unavailable', jid);
+      return _origPresence('unavailable');
+    };
+  }
+
   sessionStatus.set(sessionId, 'connecting');
 
   // ── Newsletter "View Channel" button — patch sock.sendMessage ─────────────
