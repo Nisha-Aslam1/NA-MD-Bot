@@ -179,9 +179,35 @@ function scoreMatch(title, query) {
   return words.filter((w) => t.includes(w)).length / words.length;
 }
 
-// ── Search (top 5 via play-dl → best title match, davidcyriltech fallback) ───
+async function searchNexray(query) {
+  const { data } = await axios.get(
+    `https://api.nexray.eu.cc/search/youtube?q=${encodeURIComponent(query)}`,
+    { timeout: 15000 },
+  );
+  const results = data?.result || data?.results || data?.data || [];
+  if (!data?.status || !Array.isArray(results) || !results.length) return null;
+
+  const scored = results.map((r) => ({ r, score: scoreMatch(r.title, query) }));
+  scored.sort((a, b) => b.score - a.score);
+  const r = scored[0].r;
+  return {
+    url: r.url || (r.id ? `https://youtube.com/watch?v=${r.id}` : ""),
+    title: r.title || query,
+    thumbnail: r.image_url || r.thumbnail || r.image || "",
+    duration: r.duration || r.seconds || "",
+    author: r.channel || r.author || "",
+    views: r.views || "",
+  };
+}
+
+// ── Search (Nexray primary → play-dl → davidcyriltech fallback) ───────────────
 async function searchYT(query) {
-  // Primary: play-dl (no external API, fastest, and picks the BEST of 5 matches
+  try {
+    const found = await searchNexray(query);
+    if (found?.url) return found;
+  } catch {}
+
+  // Fallback: play-dl (no external API, fastest, and picks the BEST of 5 matches
   // instead of just trusting whatever result an API puts first)
   try {
     const playdl = (await import("play-dl")).default;
@@ -315,9 +341,27 @@ async function resolveMeta(query) {
   return { ytUrl: found.url, meta: found };
 }
 
-// ── Audio provider candidates (all 3, fetched IN PARALLEL) ───────────────────
+// ── Audio provider candidates (Nexray primary + fallbacks, fetched in parallel) ─
 async function getAudioCandidates(ytUrl) {
   const enc = encodeURIComponent(ytUrl);
+
+  const pNexray = axios
+    .get(`https://api.nexray.eu.cc/downloader/ytmp3?url=${enc}`, {
+      timeout: 30000,
+    })
+    .then(({ data: d }) => {
+      const r = d?.result || d;
+      const url = r?.url || r?.download_url || r?.downloadUrl || d?.url;
+      if (d?.status !== false && typeof url === "string" && url.startsWith("http"))
+        return {
+          url,
+          title: r?.title || d?.title || "",
+          duration: r?.duration || "",
+          filename: "audio.mp3",
+        };
+      return null;
+    })
+    .catch(() => null);
 
   const p1 = axios
     .get(`https://apis.davidcyriltech.my.id/download/ytmp3?url=${enc}`, {
@@ -377,15 +421,35 @@ async function getAudioCandidates(ytUrl) {
     })
     .catch(() => null);
 
-  const settled = await Promise.allSettled([p1, p2, p3]);
+  const settled = await Promise.allSettled([pNexray, p1, p2, p3]);
   return settled
     .map((s) => (s.status === "fulfilled" ? s.value : null))
     .filter(Boolean);
 }
 
-// ── Video provider candidates (eliteprotech first-priority, all fetched IN PARALLEL) ─
+// ── Video provider candidates (Nexray primary + fallbacks, fetched in parallel) ─
 async function getVideoCandidates(ytUrl) {
   const enc = encodeURIComponent(ytUrl);
+
+  const pNexray = axios
+    .get(`https://api.nexray.eu.cc/downloader/v1/ytmp4?url=${enc}&resolusi=1080`, {
+      timeout: 30000,
+    })
+    .then(({ data: d }) => {
+      const r = d?.result || d;
+      const url = r?.url || r?.download_url || r?.downloadUrl || d?.url;
+      if (d?.status !== false && typeof url === "string" && url.startsWith("http"))
+        return {
+          url,
+          title: r?.title || d?.title || "",
+          author: r?.author || "",
+          duration: r?.duration || "",
+          quality: r?.quality || "1080p",
+          filename: "video.mp4",
+        };
+      return null;
+    })
+    .catch(() => null);
 
   const pElite = axios
     .get(`https://eliteprotech-apis.zone.id/ytdown?url=${enc}&format=mp4`, {
@@ -445,9 +509,9 @@ async function getVideoCandidates(ytUrl) {
     })
     .catch(() => null);
 
-  // Order preserved: eliteprotech first, david second, abztech third —
-  // but all three network calls already ran in parallel above.
-  const settled = await Promise.allSettled([pElite, pDavid, pAbz]);
+  // Order preserved: Nexray primary, then eliteprotech/david/abz fallbacks —
+  // but all provider network calls already run in parallel above.
+  const settled = await Promise.allSettled([pNexray, pElite, pDavid, pAbz]);
   return settled
     .map((s) => (s.status === "fulfilled" ? s.value : null))
     .filter(Boolean);

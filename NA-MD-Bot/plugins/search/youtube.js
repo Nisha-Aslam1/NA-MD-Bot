@@ -1,7 +1,8 @@
 // ============================================
 // NA MD Bot — YouTube Search (.yts)
 // Shows top results with channel, views, duration
-// Primary:  play-dl (direct, no API key)
+// Primary:  Nexray API
+// Fallback: play-dl (direct, no API key)
 // Fallback: davidcyriltech /youtube/search
 // ============================================
 import axios from 'axios';
@@ -35,7 +36,28 @@ function scoreMatch(title, query) {
   return words.filter(w => t.includes(w)).length / words.length;
 }
 
-// ── Primary: play-dl search (no rate limit for searches, very fast) ───────
+// ── Primary: Nexray search API ────────────────────────────────────────────
+async function searchNexray(query, limit = 8) {
+  const { data } = await axios.get(
+    `https://api.nexray.eu.cc/search/youtube?q=${encodeURIComponent(query)}`,
+    { timeout: 15000 },
+  );
+  const items = data?.result || data?.results || data?.data || [];
+  if (!data?.status || !Array.isArray(items) || !items.length) return [];
+
+  return items.slice(0, limit).map(r => ({
+    title:     r.title || '',
+    url:       r.url || (r.id ? `https://youtube.com/watch?v=${r.id}` : ''),
+    channel:   r.channel || r.channelTitle || r.author?.name || r.author || '',
+    duration:  r.duration || fmtDur(r.seconds) || '—',
+    views:     fmtViews(r.views || r.viewCount || r.view_count || null),
+    viewsRaw:  Number(String(r.views || r.viewCount || 0).replace(/[^0-9.]/g, '')),
+    thumbnail: r.image_url || r.thumbnail || r.image || r.thumbnails?.[0]?.url || '',
+    score:     scoreMatch(r.title, query),
+  }));
+}
+
+// ── Fallback: play-dl search (no rate limit for searches, very fast) ──────
 async function searchPlayDl(query, limit = 8) {
   const playdl = (await import('play-dl')).default;
   const res = await playdl.search(query, { source: { youtube: 'video' }, limit });
@@ -96,14 +118,23 @@ export default {
 
     let results = [];
 
-    // Try play-dl first (faster, no external API needed)
+    // Try Nexray first (requested primary API)
     try {
-      results = await searchPlayDl(query, 8);
+      results = await searchNexray(query, 8);
     } catch (e) {
-      console.error('[YTS] play-dl failed:', e.message);
+      console.error('[YTS] Nexray API failed:', e.message);
     }
 
-    // Fallback to DC API if play-dl returned nothing
+    // Fallback to play-dl if Nexray returned nothing
+    if (!results.length) {
+      try {
+        results = await searchPlayDl(query, 8);
+      } catch (e) {
+        console.error('[YTS] play-dl failed:', e.message);
+      }
+    }
+
+    // Fallback to DC API if Nexray/play-dl returned nothing
     if (!results.length) {
       try {
         results = await searchDC(query, 8);
