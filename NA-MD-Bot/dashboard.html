@@ -1,309 +1,48 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>NA MD Bot — Server</title>
-    <meta name="theme-color" content="#7C3AED" />
-    <link rel="icon" type="image/png" href="/logo.png?v=1" />
-    <style>
-      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NA MD Bot — Dashboard</title>
+  <meta name="theme-color" content="#7C3AED" />
+  <link rel="icon" type="image/webp" href="/logo.webp" />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#09071A;--surface:#120d2a;--surface2:#1a1238;--surface3:#25154f;--border:#43227d;--green:#a855f7;--green2:#7c3aed;--green-dim:rgba(168,85,247,.14);--green-glow:rgba(168,85,247,.36);--text:#f5f1ff;--text2:#c4b5fd;--text3:#7c6aa7;--red:#ff5577;--red-dim:rgba(255,85,119,.13);--yellow:#fbbf24;--yellow-dim:rgba(251,191,36,.14);--blue:#38bdf8;--blue-dim:rgba(56,189,248,.14);--purple:#c084fc;--purple-dim:rgba(192,132,252,.13);--sidebar-w:245px;--radius:16px;--radius-sm:10px}
+    html,body{min-height:100%;background:var(--bg);color:var(--text);font-family:'Segoe UI',Inter,system-ui,sans-serif;overflow-x:hidden}body::before{content:"";position:fixed;inset:-20% -10% auto;height:55vh;background:radial-gradient(ellipse at 50% 0%,rgba(168,85,247,.25),transparent 62%),radial-gradient(ellipse at 15% 20%,rgba(124,58,237,.18),transparent 45%);pointer-events:none;z-index:-1}::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border);border-radius:99px}
+    button,input,select,textarea{font:inherit}.hidden{display:none!important}.spinner{width:15px;height:15px;border:2px solid rgba(255,255,255,.25);border-top-color:currentColor;border-radius:50%;display:inline-block;animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}@keyframes pulse{50%{opacity:.45;transform:scale(.85)}}@keyframes fadeIn{from{opacity:0}to{opacity:1}}@keyframes slideIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+    #landingView{min-height:100vh;display:flex;flex-direction:column;align-items:center;background:radial-gradient(ellipse 80% 50% at 50% -10%,rgba(168,85,247,.19),transparent 65%),radial-gradient(ellipse 60% 45% at 50% 15%,rgba(124,58,237,.12),transparent 70%)}.land-nav{width:100%;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:18px 28px;border-bottom:1px solid var(--border);background:rgba(18,13,42,.86);backdrop-filter:blur(10px);position:sticky;top:0;z-index:5}.brand{display:flex;align-items:center;gap:10px}.brand img{width:38px;height:38px;border-radius:50%;border:1.5px solid var(--green);box-shadow:0 0 24px var(--green-glow)}.brand span{font-weight:800}.brand em{color:var(--green);font-style:normal}.nav-right{display:flex;align-items:center;gap:10px}.badge-online{display:flex;align-items:center;gap:7px;background:var(--green-dim);border:1px solid rgba(168,85,247,.36);border-radius:99px;padding:5px 12px;font-size:.78rem;color:var(--green);font-weight:700}.badge-online-dot,.status-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green);animation:pulse 2s infinite}.btn-admin-nav,.btn-ghost{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 14px;color:var(--text2);font-weight:700;font-size:.84rem;text-decoration:none;cursor:pointer;transition:.16s}.btn-admin-nav:hover,.btn-ghost:hover{border-color:var(--green);color:var(--green);background:var(--green-dim)}
+    .land-hero{text-align:center;padding:58px 20px 34px;max-width:700px}.land-hero-logo{width:96px;height:96px;border-radius:50%;border:2.5px solid var(--green);box-shadow:0 0 44px var(--green-glow);margin:0 auto 22px;display:block}.land-hero h1{font-size:clamp(2rem,7vw,3.4rem);font-weight:900;color:#fff;line-height:1.05;letter-spacing:-.04em}.land-hero h1 span{background:linear-gradient(135deg,#d8b4fe,#7c3aed);-webkit-background-clip:text;background-clip:text;color:transparent}.land-hero p{font-size:1rem;color:var(--text2);line-height:1.7;margin-top:14px}.land-stats{display:grid;grid-template-columns:repeat(4,minmax(115px,1fr));gap:14px;width:100%;max-width:720px;padding:0 20px 34px}.land-stat{background:linear-gradient(180deg,rgba(168,85,247,.10),rgba(18,13,42,.96));border:1px solid var(--border);border-radius:var(--radius);padding:18px;text-align:center}.land-stat-num{font-size:1.7rem;font-weight:900;color:#fff}.land-stat-label{font-size:.75rem;color:var(--text2);margin-top:4px}.land-section{width:100%;max-width:620px;padding:0 20px 26px}.land-section-title{font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.09em;color:var(--text2);margin-bottom:14px;display:flex;align-items:center;gap:10px}.land-section-title::before,.land-section-title::after{content:"";flex:1;height:1px;background:var(--border)}.land-card{background:rgba(18,13,42,.92);border:1px solid var(--border);border-radius:var(--radius);padding:22px;box-shadow:0 18px 60px rgba(0,0,0,.22)}.land-card h3{font-size:1rem;margin-bottom:6px}.land-card p{font-size:.84rem;color:var(--text2);line-height:1.6;margin-bottom:18px}.input-row{display:flex;gap:8px}.input{flex:1;min-width:0;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:11px 13px;color:var(--text);outline:none}.input:focus,textarea:focus,select:focus{border-color:var(--green);box-shadow:0 0 0 3px var(--green-dim)}.btn-primary{background:linear-gradient(135deg,var(--green),var(--green2));color:#fff;border:none;border-radius:var(--radius-sm);padding:11px 18px;font-weight:900;cursor:pointer;box-shadow:0 5px 22px var(--green-glow);transition:.16s;white-space:nowrap}.btn-primary:hover{transform:translateY(-1px);filter:brightness(1.08)}.btn-primary:disabled{opacity:.55;cursor:not-allowed;transform:none}.code-box{display:none;margin-top:14px;background:var(--surface2);border:1px solid rgba(168,85,247,.48);border-radius:var(--radius);padding:18px;text-align:center;animation:fadeIn .25s}.pair-code{font-family:ui-monospace,monospace;font-size:2rem;font-weight:900;letter-spacing:.18em;color:var(--green)}.muted{font-size:.78rem;color:var(--text2);line-height:1.5}.err{display:none;color:var(--red);font-size:.82rem;margin-top:8px}.mini-sessions{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:14px}.mini-card{display:flex;gap:11px;align-items:center;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px}.mini-avatar,.sc-avatar{width:38px;height:38px;border-radius:50%;background:var(--green-dim);border:1.5px solid var(--green);display:grid;place-items:center;color:var(--green);font-weight:900;flex-shrink:0}.mini-avatar.dc,.sc-avatar.dc{background:var(--red-dim);border-color:var(--red);color:var(--red)}.mini-info{min-width:0}.mini-phone,.sc-phone{font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.mini-status{font-size:.72rem;color:var(--green);display:flex;gap:5px;align-items:center}.mini-status.dc{color:var(--red)}.mini-dot{width:5px;height:5px;border-radius:50%;background:currentColor}.footer{color:var(--text3);font-size:.76rem;text-align:center;padding:0 20px 30px}
+    #app{display:none;height:100vh;overflow:hidden}#app.visible{display:flex;animation:fadeIn .25s}#sidebar{width:var(--sidebar-w);min-width:var(--sidebar-w);height:100vh;background:rgba(18,13,42,.98);border-right:1px solid var(--border);display:flex;flex-direction:column}.sb-brand{padding:18px 14px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border)}.sb-brand img{width:40px;height:40px;border-radius:50%;border:1.5px solid var(--green)}.sb-brand-name{font-weight:900}.sb-brand-ver{font-size:.7rem;color:var(--text2)}.sb-nav{flex:1;padding:9px 7px;overflow:auto}.sb-section{font-size:.65rem;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);padding:12px 10px 5px}.nav-item{display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:var(--radius-sm);cursor:pointer;color:var(--text2);font-size:.86rem;font-weight:650;transition:.15s}.nav-item:hover{background:var(--surface2);color:var(--text)}.nav-item.active{background:var(--green-dim);color:var(--green)}.nav-item svg{width:17px;height:17px}.nav-badge{margin-left:auto;background:var(--green);color:#fff;font-size:.68rem;font-weight:900;padding:1px 7px;border-radius:99px}.sb-footer{padding:10px 7px;border-top:1px solid var(--border)}.bot-status{display:flex;align-items:center;gap:8px;padding:8px 11px;background:var(--surface2);border-radius:var(--radius-sm);margin-bottom:7px}.status-dot.red{background:var(--red);box-shadow:0 0 8px var(--red)}.status-label{font-size:.78rem;color:var(--text2);flex:1}.status-uptime{font-size:.7rem;color:var(--text3)}.btn-logout{width:100%;padding:9px;background:transparent;border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text2);font-weight:700;cursor:pointer}.btn-logout:hover{border-color:var(--red);color:var(--red);background:var(--red-dim)}#main{flex:1;height:100vh;overflow:auto}.page-header{padding:22px 26px 0}.page-title{font-size:1.35rem;font-weight:900}.page-sub{font-size:.84rem;color:var(--text2);margin-top:3px}.content-area{padding:18px 26px 32px}.page{display:none}.page.active{display:block;animation:slideIn .2s}.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:12px;margin-bottom:20px}.stat-card,.panel,.session-card{background:rgba(18,13,42,.94);border:1px solid var(--border);border-radius:var(--radius);padding:16px}.stat-card:hover,.session-card:hover,.panel:hover{border-color:rgba(168,85,247,.48)}.stat-icon{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;margin-bottom:10px}.stat-icon.green{background:var(--green-dim);color:var(--green)}.stat-icon.blue{background:var(--blue-dim);color:var(--blue)}.stat-icon.yellow{background:var(--yellow-dim);color:var(--yellow)}.stat-icon.red{background:var(--red-dim);color:var(--red)}.stat-icon.purple{background:var(--purple-dim);color:var(--purple)}.stat-icon svg{width:19px;height:19px}.stat-num{font-size:1.75rem;font-weight:900}.stat-label{font-size:.75rem;color:var(--text2);margin-top:3px}.section-hdr{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:14px 0 12px}.section-title{font-weight:850}.section-meta{font-size:.78rem;color:var(--text2)}.sessions-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:12px}.session-card{position:relative;overflow:hidden}.session-card::before{content:"";position:absolute;inset:0 0 auto;height:2px;background:var(--green);transform:scaleX(0);transform-origin:left;transition:.2s}.session-card:hover::before{transform:scaleX(1)}.session-card.disconnected{opacity:.72}.session-card.disconnected::before{background:var(--red)}.sc-top{display:flex;align-items:center;gap:12px;margin-bottom:12px}.sc-info{flex:1;min-width:0}.sc-name{font-size:.78rem;color:var(--text2);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.sc-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:99px;font-size:.71rem;font-weight:800}.sc-badge.connected{background:var(--green-dim);color:var(--green)}.sc-badge.connecting,.sc-badge.reconnecting{background:var(--yellow-dim);color:var(--yellow)}.sc-badge.disconnected{background:var(--red-dim);color:var(--red)}.sc-badge-dot{width:5px;height:5px;border-radius:50%;background:currentColor}.sc-meta{display:flex;align-items:center;justify-content:space-between;margin-top:11px}.sc-time{font-size:.74rem;color:var(--text2)}.btn-danger{background:var(--red-dim);color:var(--red);border:1px solid rgba(255,85,119,.28);border-radius:var(--radius-sm);padding:5px 11px;font-size:.77rem;font-weight:800;cursor:pointer}.empty-state{text-align:center;padding:44px 20px;color:var(--text2)}.empty-state svg{width:44px;height:44px;color:var(--text3);margin-bottom:12px}.cat-grid{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}.cat-pill{background:var(--surface2);border:1px solid var(--border);border-radius:99px;padding:4px 11px;font-size:.75rem;color:var(--text2)}.cat-pill strong{color:var(--text)}.settings-form{display:grid;gap:16px;max-width:680px}.settings-card{background:rgba(18,13,42,.94);border:1px solid var(--border);border-radius:var(--radius);padding:18px}.settings-card-title{font-weight:850;margin-bottom:14px}.setting-row{display:flex;justify-content:space-between;gap:18px;padding:10px 0;border-bottom:1px solid var(--border)}.setting-row:last-child{border-bottom:none}.setting-label{font-size:.88rem}.setting-sub{font-size:.74rem;color:var(--text2);margin-top:3px}.pair-card{max-width:520px}.pair-form{display:flex;flex-direction:column;gap:10px}.pair-input,select,textarea{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:11px 13px;color:var(--text);outline:none}.log-toolbar{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}.log-filter{flex:1;min-width:180px}.btn-sm{padding:8px 14px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--surface2);color:var(--text2);font-weight:750;cursor:pointer}.btn-sm:hover,.btn-sm.active{border-color:var(--green);color:var(--green);background:var(--green-dim)}.log-box{background:#070511;border:1px solid var(--border);border-radius:var(--radius);padding:14px;font-family:ui-monospace,monospace;font-size:.75rem;height:430px;overflow:auto;line-height:1.55}.log-line.info{color:#a7f3d0}.log-line.warn{color:var(--yellow)}.log-line.error{color:var(--red)}.log-line.debug{color:var(--text3)}.log-ts{color:var(--text3);margin-right:6px}.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}.action-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}.action-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;text-align:left;color:var(--text);cursor:pointer}.action-card:hover{border-color:var(--green);background:var(--green-dim)}.toast{position:fixed;right:18px;bottom:18px;z-index:40;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;color:var(--text2);box-shadow:0 18px 60px rgba(0,0,0,.35);display:none}.toast.show{display:block;animation:slideIn .2s}.menu-btn{display:none}.mobile-overlay{display:none}.auth-gate{position:fixed;inset:0;z-index:100;display:none;place-items:center;background:radial-gradient(ellipse at 50% 0%,rgba(168,85,247,.22),transparent 60%),rgba(9,7,26,.96);padding:20px}.auth-gate.show{display:grid}.auth-card{width:min(420px,100%);background:rgba(18,13,42,.98);border:1px solid var(--border);border-radius:var(--radius);padding:24px;box-shadow:0 24px 90px rgba(0,0,0,.45);text-align:center}.auth-card img{width:72px;height:72px;border-radius:50%;border:2px solid var(--green);box-shadow:0 0 34px var(--green-glow);margin-bottom:14px}.auth-card h2{font-size:1.35rem;margin-bottom:7px}.auth-card p{color:var(--text2);font-size:.84rem;line-height:1.6;margin-bottom:16px}.server-links-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.server-link-card{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:14px;text-decoration:none;color:var(--text);transition:.16s}.server-link-card:hover{border-color:var(--green);background:var(--green-dim);transform:translateY(-1px)}.server-link-name{font-weight:900}.server-link-url{font-size:.72rem;color:var(--text2);margin-top:3px;word-break:break-all}.server-link-open{background:var(--green-dim);color:var(--green);border:1px solid rgba(168,85,247,.28);border-radius:99px;padding:5px 10px;font-size:.72rem;font-weight:900;white-space:nowrap}.current-server-banner{display:flex;align-items:center;justify-content:space-between;gap:12px;background:linear-gradient(135deg,var(--green-dim),rgba(18,13,42,.96));border:1px solid rgba(168,85,247,.35);border-radius:var(--radius);padding:14px;margin-bottom:14px}.current-server-banner strong{color:#fff}.env-code{font-family:ui-monospace,monospace;background:#070511;border:1px solid var(--border);border-radius:8px;padding:2px 6px;color:var(--green)}
+    @media(max-width:820px){.land-nav{padding:14px 16px}.badge-online{display:none}.land-stats{grid-template-columns:repeat(2,1fr)}.input-row{flex-direction:column}.menu-btn{display:inline-flex}.mobile-overlay.show{display:block;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:20}#sidebar{position:fixed;left:-260px;top:0;z-index:30;transition:left .22s}#sidebar.open{left:0}#app.visible{display:block}.page-header,.content-area{padding-left:18px;padding-right:18px}.grid-2{grid-template-columns:1fr}.nav-right .btn-admin-nav{padding:8px 10px}.land-hero{padding-top:42px}}
+  </style>
+</head>
+<body>
+  <div id="authGate" class="auth-gate"><div class="auth-card"><img src="/logo.png?v=1" alt="NA MD Bot"><h2>Dashboard Access</h2><p>Enter the password configured in <span class="env-code">DASHBOARD_PASSWORD</span> to open this NA MD Bot dashboard.</p><input id="dashboardPassword" class="input" type="password" placeholder="Dashboard password" onkeydown="if(event.key==='Enter') dashboardLogin()"><button id="dashboardLoginBtn" class="btn-primary" style="width:100%;margin-top:10px" onclick="dashboardLogin()">Unlock Dashboard</button><div id="dashboardAuthErr" class="err"></div></div></div>
+  <section id="landingView">
+    <nav class="land-nav">
+      <div class="brand"><img src="/logo.png?v=1" alt="NA MD Bot"><span>NA MD <em>Bot</em></span></div>
+      <div class="nav-right"><div class="badge-online"><span class="badge-online-dot"></span> Server Online</div><button class="btn-admin-nav" onclick="showApp()">Admin Dashboard</button></div>
+    </nav>
+    <div class="land-hero"><img class="land-hero-logo" src="/logo.png?v=1" alt="NA MD Bot"><h1>NA MD <span>Bot</span> Dashboard</h1><p>Fast multi-device WhatsApp bot control panel with live sessions, pairing code setup, plugin stats and realtime server health — styled for NA MD Bot.</p></div>
+    <div class="land-stats"><div class="land-stat"><div class="land-stat-num" id="landSessions">0</div><div class="land-stat-label">Connected</div></div><div class="land-stat"><div class="land-stat-num" id="landPlugins">0</div><div class="land-stat-label">Plugins</div></div><div class="land-stat"><div class="land-stat-num" id="landGroups">0</div><div class="land-stat-label">Groups</div></div><div class="land-stat"><div class="land-stat-num" id="landRam">0 MB</div><div class="land-stat-label">RAM</div></div></div>
+    <section class="land-section"><div class="land-section-title">Quick Pair</div><div class="land-card"><h3>Connect a WhatsApp number</h3><p>Enter a session name and phone number with country code. The generated code appears below and can be entered in WhatsApp linked devices.</p><div class="input-row"><input id="landSessionId" class="input" placeholder="Session ID" value="default"><input id="landPhone" class="input" placeholder="923001234567"><button id="landPairBtn" class="btn-primary" onclick="createPair('land')">Get Code</button></div><div id="landPairBox" class="code-box"><div id="landPairCode" class="pair-code">------</div><div class="muted">Open WhatsApp → Linked devices → Link with phone number</div></div><div id="landPairErr" class="err"></div></div></section>
+    <section class="land-section"><div class="land-section-title">Live Sessions</div><div class="land-card"><div id="miniSessions" class="mini-sessions"><div class="muted">Loading sessions…</div></div></div></section><p class="footer">NA MD Bot v<span id="footerVersion">1.0.0</span> · Developed by Nisha Aslam</p>
+  </section>
+  <div class="mobile-overlay" id="overlay" onclick="toggleSidebar(false)"></div>
+  <section id="app"><aside id="sidebar"><div class="sb-brand"><img src="/logo.png?v=1" alt="NA"><div><div class="sb-brand-name">NA MD Bot</div><div class="sb-brand-ver">Dashboard v<span id="sbVersion">1.0.0</span></div></div></div><nav class="sb-nav"><div class="sb-section">Main</div><div class="nav-item active" data-page="overview" onclick="navTo('overview')">🏠 Overview</div><div class="nav-item" data-page="sessions" onclick="navTo('sessions')">📱 Sessions <span class="nav-badge" id="navSessionBadge">0</span></div><div class="nav-item" data-page="pair" onclick="navTo('pair')">🔗 Pair Device</div><div class="nav-item" data-page="plugins" onclick="navTo('plugins')">⚡ Plugins</div><div class="nav-item" data-page="servers" onclick="navTo('servers')">🌐 Servers</div><div class="sb-section">Tools</div><div class="nav-item" data-page="logs" onclick="navTo('logs')">📋 Live Logs</div><div class="nav-item" data-page="settings" onclick="navTo('settings')">⚙️ Setup Guide</div></nav><div class="sb-footer"><div class="bot-status"><span class="status-dot" id="botDot"></span><span class="status-label" id="botLabel">Online</span><span class="status-uptime" id="botUptime">--</span></div><button class="btn-logout" onclick="showLanding()">← Landing</button></div></aside><main id="main"><div class="page-header"><button class="btn-ghost menu-btn" onclick="toggleSidebar(true)">☰ Menu</button><h2 class="page-title" id="pageTitle">Overview</h2><p class="page-sub" id="pageSub">Realtime NA MD Bot server summary.</p></div><div class="content-area"><section class="page active" id="page-overview"><div class="stats-grid"><div class="stat-card"><div class="stat-icon green">📱</div><div class="stat-num" id="statSessions">0</div><div class="stat-label">Connected Sessions</div></div><div class="stat-card"><div class="stat-icon purple">⚡</div><div class="stat-num" id="statPlugins">0</div><div class="stat-label">Loaded Plugins</div></div><div class="stat-card"><div class="stat-icon blue">👥</div><div class="stat-num" id="statGroups">0</div><div class="stat-label">Known Groups</div></div><div class="stat-card"><div class="stat-icon yellow">💾</div><div class="stat-num" id="statRam">0 MB</div><div class="stat-label">Memory Used</div></div></div><div class="section-hdr"><div class="section-title">Recent Sessions</div><div class="section-meta" id="sessionMeta">Updated now</div></div><div id="overviewSessions" class="sessions-grid"></div></section><section class="page" id="page-sessions"><div class="section-hdr"><div class="section-title">All Sessions</div><button class="btn-sm" onclick="loadStats()">Refresh</button></div><div id="sessionsGrid" class="sessions-grid"></div></section><section class="page" id="page-pair"><div class="panel pair-card"><h3>Pair New Device</h3><p class="muted" style="margin:7px 0 16px">Use a unique session ID and a phone number including country code. Example: 923001234567.</p><div class="pair-form"><input id="adminSessionId" class="pair-input" placeholder="Session ID" value="default"><input id="adminPhone" class="pair-input" placeholder="Phone number with country code"><button id="adminPairBtn" class="btn-primary" onclick="createPair('admin')">Request Pairing Code</button></div><div id="adminPairBox" class="code-box"><div id="adminPairCode" class="pair-code">------</div><div class="muted">Code is cached for the selected session while pairing is active.</div></div><div id="adminPairErr" class="err"></div></div></section><section class="page" id="page-plugins"><div class="panel"><div class="section-hdr" style="margin-top:0"><div class="section-title">Plugin Categories</div><div class="section-meta" id="catMeta">0 categories</div></div><div id="categoryGrid" class="cat-grid"></div></div></section><section class="page" id="page-servers"><div class="current-server-banner"><div><div class="muted">Current server from .env <span class="env-code">SERVER_ID</span></div><strong id="currentServerName">NA MD Bot</strong></div><button class="btn-sm" onclick="loadDashboardConfig()">Refresh</button></div><div class="panel"><div class="section-hdr" style="margin-top:0"><div class="section-title">Access Another Server</div><div class="section-meta">Open in new tab</div></div><div class="server-links-grid" id="serverLinks"></div></div></section><section class="page" id="page-logs"><div class="log-toolbar"><input id="logFilter" class="input log-filter" placeholder="Filter logs..." oninput="renderLogs()"><button class="btn-sm" onclick="clearLogs()">Clear</button><button class="btn-sm active" id="autoScrollBtn" onclick="toggleAutoScroll()">Auto-scroll</button></div><div id="logBox" class="log-box"></div></section><section class="page" id="page-settings"><div class="settings-form"><div class="settings-card"><div class="settings-card-title">NA MD Bot Setup Structure</div><div class="setting-row"><div><div class="setting-label">Bot Name</div><div class="setting-sub">Keep all dashboard branding as NA MD Bot.</div></div><strong>NA MD Bot</strong></div><div class="setting-row"><div><div class="setting-label">Developer</div><div class="setting-sub">Dashboard footer and server banner owner.</div></div><strong>Nisha Aslam</strong></div><div class="setting-row"><div><div class="setting-label">Dashboard Password</div><div class="setting-sub">Set this in .env: <span class="env-code">DASHBOARD_PASSWORD</span></div></div><strong>(Nisha&aslam12:@)</strong></div><div class="setting-row"><div><div class="setting-label">Server Name</div><div class="setting-sub">Shown on the Servers tab from .env: <span class="env-code">SERVER_ID</span></div></div><strong id="settingsServerName">NA MD Bot</strong></div><div class="setting-row"><div><div class="setting-label">Pair Endpoint</div><div class="setting-sub">Creates QR or pairing-code sessions.</div></div><strong>/session/create</strong></div><div class="setting-row"><div><div class="setting-label">Stats Endpoint</div><div class="setting-sub">Feeds realtime counts and categories.</div></div><strong>/stats</strong></div></div><div class="settings-card"><div class="settings-card-title">Quick Actions</div><div class="action-grid"><button class="action-card" onclick="loadStats()"><strong>Refresh Stats</strong><br><span class="muted">Reload dashboard data.</span></button><button class="action-card" onclick="navTo('pair')"><strong>Pair Device</strong><br><span class="muted">Open pairing form.</span></button><button class="action-card" onclick="window.open('/health','_blank')"><strong>Health JSON</strong><br><span class="muted">View server health.</span></button></div></div></div></section></div></main></section><div id="toast" class="toast"></div>
+<script>
+const pages={overview:['Overview','Realtime NA MD Bot server summary.'],sessions:['Sessions','Manage connected and disconnected WhatsApp sessions.'],pair:['Pair Device','Generate a WhatsApp linked-device pairing code.'],plugins:['Plugins','Loaded command category counts.'],servers:['Servers','Open linked NA MD Bot server dashboards.'],logs:['Live Logs','Browser-side dashboard events and server pushes.'],settings:['Setup Guide','Important NA MD Bot structure and endpoint notes.']};let state={sessions:[],categories:{},version:'1.0.0',uptime:'--',serverName:'NA MD Bot',authRequired:false,autoScroll:true,logs:[]};
 
-      * { margin: 0; padding: 0; box-sizing: border-box; }
-
-      body {
-        background: #09071A;
-        color: #E2D9F3;
-        font-family: 'Inter', 'Segoe UI', sans-serif;
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 28px;
-        padding: 32px 20px;
-        overflow-x: hidden;
-      }
-
-      /* ── Ambient background glow ── */
-      body::before {
-        content: '';
-        position: fixed;
-        top: -200px; left: 50%;
-        transform: translateX(-50%);
-        width: 700px; height: 500px;
-        background: radial-gradient(ellipse at center, rgba(124,58,237,0.18) 0%, rgba(88,28,220,0.08) 50%, transparent 75%);
-        pointer-events: none;
-        z-index: 0;
-      }
-      body::after {
-        content: '';
-        position: fixed;
-        bottom: -150px; left: 50%;
-        transform: translateX(-50%);
-        width: 500px; height: 400px;
-        background: radial-gradient(ellipse at center, rgba(168,85,247,0.1) 0%, transparent 70%);
-        pointer-events: none;
-        z-index: 0;
-      }
-
-      /* ── Logo ── */
-      .logo-wrap {
-        position: relative;
-        z-index: 1;
-      }
-      .logo-wrap::before {
-        content: '';
-        position: absolute;
-        inset: -12px;
-        border-radius: 50%;
-        background: radial-gradient(circle, rgba(139,92,246,0.35) 0%, transparent 70%);
-        animation: glow-pulse 3s ease-in-out infinite;
-      }
-      @keyframes glow-pulse {
-        0%, 100% { opacity: 0.7; transform: scale(1); }
-        50%       { opacity: 1;   transform: scale(1.1); }
-      }
-      .logo {
-        position: relative;
-        width: 100px; height: 100px;
-        border-radius: 50%;
-        border: 2px solid rgba(139,92,246,0.8);
-        box-shadow:
-          0 0 0 4px rgba(139,92,246,0.15),
-          0 0 32px rgba(139,92,246,0.45),
-          0 0 64px rgba(88,28,220,0.25);
-        display: block;
-      }
-
-      /* ── Title ── */
-      h1 {
-        position: relative;
-        z-index: 1;
-        font-size: 1.75rem;
-        font-weight: 800;
-        color: #fff;
-        letter-spacing: -0.02em;
-        text-align: center;
-      }
-      h1 .accent {
-        background: linear-gradient(135deg, #A855F7, #7C3AED);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-      }
-
-      /* ── Status pill ── */
-      .status {
-        position: relative;
-        z-index: 1;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        font-size: 0.82rem;
-        font-weight: 500;
-        color: #A78BFA;
-        background: rgba(139,92,246,0.1);
-        border: 1px solid rgba(139,92,246,0.3);
-        border-radius: 999px;
-        padding: 6px 16px;
-        letter-spacing: 0.02em;
-      }
-      .dot {
-        width: 7px; height: 7px;
-        border-radius: 50%;
-        background: #A855F7;
-        box-shadow: 0 0 8px #A855F7, 0 0 16px rgba(168,85,247,0.6);
-        animation: dot-pulse 2s ease-in-out infinite;
-      }
-      @keyframes dot-pulse {
-        0%, 100% { opacity: 1; box-shadow: 0 0 8px #A855F7, 0 0 16px rgba(168,85,247,0.6); }
-        50%       { opacity: 0.5; box-shadow: 0 0 4px #A855F7; }
-      }
-
-      /* ── CTA Button ── */
-      .btn {
-        position: relative;
-        z-index: 1;
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-        background: linear-gradient(135deg, #7C3AED, #6D28D9);
-        color: #fff;
-        font-weight: 700;
-        font-size: 0.97rem;
-        padding: 14px 36px;
-        border-radius: 14px;
-        text-decoration: none;
-        transition: transform 0.18s, box-shadow 0.18s;
-        box-shadow: 0 4px 20px rgba(124,58,237,0.45), 0 1px 0 rgba(255,255,255,0.1) inset;
-        letter-spacing: 0.01em;
-      }
-      .btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 32px rgba(124,58,237,0.65), 0 1px 0 rgba(255,255,255,0.15) inset;
-      }
-      .btn:active { transform: translateY(0); }
-      .btn svg { width: 18px; height: 18px; }
-
-      /* ── Info cards ── */
-      .cards {
-        position: relative;
-        z-index: 1;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        width: 100%;
-        max-width: 360px;
-      }
-      .card {
-        display: flex;
-        align-items: center;
-        gap: 14px;
-        background: rgba(139,92,246,0.06);
-        border: 1px solid rgba(139,92,246,0.18);
-        border-radius: 14px;
-        padding: 13px 16px;
-        transition: border-color 0.2s, background 0.2s;
-      }
-      .card:hover {
-        border-color: rgba(139,92,246,0.4);
-        background: rgba(139,92,246,0.1);
-      }
-      .card-icon {
-        width: 38px; height: 38px;
-        border-radius: 10px;
-        background: rgba(139,92,246,0.15);
-        border: 1px solid rgba(139,92,246,0.25);
-        display: flex; align-items: center; justify-content: center;
-        flex-shrink: 0;
-      }
-      .card-icon svg { width: 18px; height: 18px; }
-      .card-body { display: flex; flex-direction: column; gap: 2px; }
-      .card-label {
-        font-size: 0.68rem;
-        color: #7C5CB8;
-        text-transform: uppercase;
-        letter-spacing: 0.07em;
-        font-weight: 600;
-      }
-      .card-value {
-        font-size: 0.92rem;
-        color: #EDE9FE;
-        font-weight: 600;
-      }
-      .card-sub {
-        font-size: 0.74rem;
-        color: #6B5A8A;
-        margin-top: 1px;
-      }
-
-      /* ── Highlighted card ── */
-      .card-privacy {
-        border-color: rgba(139,92,246,0.28);
-        background: rgba(109,40,217,0.08);
-      }
-
-      /* ── Footer ── */
-      .footer {
-        position: relative;
-        z-index: 1;
-        font-size: 0.75rem;
-        color: #4B3A6E;
-        text-align: center;
-      }
-    </style>
-  </head>
-  <body>
-
-    <div class="logo-wrap">
-      <img src="/logo.png?v=1" class="logo" alt="NA MD Bot" onerror="this.style.display='none'" />
-    </div>
-
-    <h1>NA MD <span class="accent">Bot</span></h1>
-
-    <div class="status">
-      <span class="dot"></span>
-      Server Online
-    </div>
-
-    <a href="https://na-md-bot.vercel.app/" target="_blank" class="btn">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-        <polyline points="15 3 21 3 21 9"/>
-        <line x1="10" y1="14" x2="21" y2="3"/>
-      </svg>
-      Open Dashboard
-    </a>
-
-    <div class="cards">
-
-      <div class="card">
-        <div class="card-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#A855F7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-        </div>
-        <div class="card-body">
-          <span class="card-label">Version</span>
-          <span class="card-value">v1.0.0</span>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#A855F7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-        </div>
-        <div class="card-body">
-          <span class="card-label">Developer</span>
-          <span class="card-value">Nisha Aslam</span>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#A855F7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-        </div>
-        <div class="card-body">
-          <span class="card-label">Platform</span>
-          <span class="card-value">Multi-Device WhatsApp</span>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#A855F7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-        </div>
-        <div class="card-body">
-          <span class="card-label">Features</span>
-          <span class="card-value">200+ Commands &amp; Tools</span>
-          <span class="card-sub">Downloader · AI · Islamic · Fun · Group</span>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#A855F7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
-        </div>
-        <div class="card-body">
-          <span class="card-label">Multi-Session</span>
-          <span class="card-value">Multiple Numbers at Once</span>
-          <span class="card-sub">Connect many WhatsApp accounts simultaneously</span>
-        </div>
-      </div>
-
-      <div class="card card-privacy">
-        <div class="card-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#A855F7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        </div>
-        <div class="card-body">
-          <span class="card-label">Privacy &amp; Security</span>
-          <span class="card-value">Your Data is 100% Safe</span>
-          <span class="card-sub">No chats or media saved · Temp files auto-deleted</span>
-        </div>
-      </div>
-
-    </div>
-
-    <p class="footer">NA MD Bot v1.0.0 · Developed by Nisha Aslam</p>
-
-  </body>
+const remoteServers=[['NA MD Bot Server4','https://16-16-79-73.nip.io'],['NA MD Bot Server3','https://16-16-166-51.nip.io'],['NA MD Bot Server2','https://13-51-45-252.nip.io'],['NA MD Bot Server1','https://13-63-130-77.nip.io']];async function loadDashboardConfig(){try{const d=await fetch('/dashboard-config',{cache:'no-store'}).then(r=>r.json());state.authRequired=!!d.authRequired;state.serverName=d.serverName||d.bot||'NA MD Bot';setText('currentServerName',state.serverName);setText('settingsServerName',state.serverName);setText('footerVersion',d.version||state.version);setText('sbVersion',d.version||state.version);if(state.authRequired&&!sessionStorage.getItem('naDashboardAuthed'))$('authGate').classList.add('show');else $('authGate').classList.remove('show');renderServerLinks()}catch(e){addLog('warn','Dashboard config unavailable: '+e.message)}}async function dashboardLogin(){const pass=$('dashboardPassword').value;const err=$('dashboardAuthErr');const btn=$('dashboardLoginBtn');err.style.display='none';btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Checking…';try{const r=await fetch('/dashboard-login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:pass})});const d=await r.json();if(!r.ok||!d.ok)throw new Error('Wrong dashboard password');sessionStorage.setItem('naDashboardAuthed','1');$('authGate').classList.remove('show');state.serverName=d.serverName||state.serverName;setText('currentServerName',state.serverName);setText('settingsServerName',state.serverName);toast('Dashboard unlocked')}catch(e){err.textContent=e.message;err.style.display='block'}finally{btn.disabled=false;btn.textContent='Unlock Dashboard'}}function renderServerLinks(){setHTML('serverLinks',remoteServers.map(([name,url])=>`<a class="server-link-card" href="${url}" target="_blank" rel="noopener"><div><div class="server-link-name">${esc(name)}</div><div class="server-link-url">${esc(url)}</div></div><span class="server-link-open">Open</span></a>`).join(''))}
+function $(id){return document.getElementById(id)}function esc(s){return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2600)}function addLog(type,msg){state.logs.push({type,ts:new Date().toLocaleTimeString(),msg});if(state.logs.length>300)state.logs.shift();renderLogs()}function renderLogs(){const q=($('logFilter')?.value||'').toLowerCase();const rows=state.logs.filter(l=>!q||l.msg.toLowerCase().includes(q)||l.type.includes(q));$('logBox').innerHTML=rows.map(l=>`<div class="log-line ${l.type}"><span class="log-ts">${l.ts}</span>${esc(l.msg)}</div>`).join('')||'<div class="muted">No logs yet.</div>';if(state.autoScroll)$('logBox').scrollTop=$('logBox').scrollHeight}function clearLogs(){state.logs=[];renderLogs()}function toggleAutoScroll(){state.autoScroll=!state.autoScroll;$('autoScrollBtn').classList.toggle('active',state.autoScroll)}
+function showApp(){ $('landingView').style.display='none'; $('app').classList.add('visible'); loadStats(); }function showLanding(){ $('app').classList.remove('visible'); $('landingView').style.display='flex'; toggleSidebar(false); loadStats(); }function toggleSidebar(open){$('sidebar').classList.toggle('open',open);$('overlay').classList.toggle('show',open)}function navTo(page){document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active',n.dataset.page===page));document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id==='page-'+page));$('pageTitle').textContent=pages[page][0];$('pageSub').textContent=pages[page][1];toggleSidebar(false);if(page==='plugins')renderCategories();if(page==='servers')renderServerLinks();if(page==='logs')renderLogs()}
+async function loadStats(){try{const d=await fetch('/stats',{cache:'no-store'}).then(r=>r.json());state.sessions=d.sessions||[];state.categories=d.categories||{};state.version=d.version||state.version;state.uptime=d.uptime||'--';if(d.serverName){state.serverName=d.serverName;setText('currentServerName',d.serverName);setText('settingsServerName',d.serverName)}const connected=d.connectedSessions??state.sessions.filter(s=>s.status==='connected').length;setText('landSessions',connected);setText('landPlugins',d.plugins||0);setText('landGroups',d.groups||0);setText('landRam',(d.ram||0)+' MB');setText('statSessions',connected);setText('statPlugins',d.plugins||0);setText('statGroups',d.groups||0);setText('statRam',(d.ram||0)+' MB');setText('navSessionBadge',state.sessions.length);setText('botUptime',state.uptime);setText('sessionMeta','Updated '+new Date().toLocaleTimeString());renderSessions();renderCategories();addLog('info','Stats refreshed successfully');}catch(e){addLog('error','Failed to load /stats: '+e.message);toast('Unable to load stats')}}function setText(id,v){const el=$(id);if(el)el.textContent=v}
+function renderSessions(){const empty='<div class="empty-state"><div>📭</div><p>No sessions yet. Create one from Pair Device.</p></div>';const cards=state.sessions.map(s=>sessionCard(s)).join('')||empty;setHTML('overviewSessions',state.sessions.slice(0,4).map(s=>sessionCard(s)).join('')||empty);setHTML('sessionsGrid',cards);setHTML('miniSessions',state.sessions.map(s=>miniCard(s)).join('')||'<div class="muted">No sessions connected yet.</div>');const online=state.sessions.some(s=>s.status==='connected');$('botDot').classList.toggle('red',!online&&state.sessions.length>0);$('botLabel').textContent=online?'Online':state.sessions.length?'Waiting':'Ready'}function setHTML(id,v){const el=$(id);if(el)el.innerHTML=v}function initials(s){return (s.name||s.id||'NA').slice(0,2).toUpperCase()}function sessionCard(s){const status=s.status||'disconnected',dc=status==='disconnected';return `<div class="session-card ${dc?'disconnected':''}"><div class="sc-top"><div class="sc-avatar ${dc?'dc':''}">${esc(initials(s))}</div><div class="sc-info"><div class="sc-phone">${esc(s.id||'default')}</div><div class="sc-name">${esc(s.name||'NA MD Bot Session')}</div></div><span class="sc-badge ${esc(status)}"><span class="sc-badge-dot"></span>${esc(status)}</span></div><div class="sc-meta"><span class="sc-time">${s.connectedAt?'Since '+new Date(s.connectedAt).toLocaleString():'Not connected'}</span><button class="btn-danger" onclick="deleteSession('${esc(s.id)}')">Delete</button></div></div>`}function miniCard(s){const dc=(s.status||'')!=='connected';return `<div class="mini-card"><div class="mini-avatar ${dc?'dc':''}">${esc(initials(s))}</div><div class="mini-info"><div class="mini-phone">${esc(s.id)}</div><div class="mini-status ${dc?'dc':''}"><span class="mini-dot"></span>${esc(s.status||'unknown')}</div></div></div>`}
+function renderCategories(){const entries=Object.entries(state.categories||{}).sort((a,b)=>b[1]-a[1]);setText('catMeta',entries.length+' categories');setHTML('categoryGrid',entries.map(([k,v])=>`<span class="cat-pill">${esc(k)} <strong>${v}</strong></span>`).join('')||'<span class="muted">No plugin categories loaded.</span>')}
+async function createPair(scope){const isLand=scope==='land';const sid=$(isLand?'landSessionId':'adminSessionId').value.trim()||'default';const phone=$(isLand?'landPhone':'adminPhone').value.replace(/[^0-9]/g,'');const btn=$(isLand?'landPairBtn':'adminPairBtn'),err=$(isLand?'landPairErr':'adminPairErr'),box=$(isLand?'landPairBox':'adminPairBox'),codeEl=$(isLand?'landPairCode':'adminPairCode');err.style.display='none';box.style.display='none';if(!phone){err.textContent='Phone number is required.';err.style.display='block';return}btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Requesting…';try{const r=await fetch('/session/create',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:sid,method:'pairing',phoneNumber:phone})}).then(r=>r.json());if(!r.ok)throw new Error(r.error||'Request failed');codeEl.textContent='WAITING';box.style.display='block';addLog('info','Pairing requested for session '+sid);pollPairCode(sid,codeEl,err)}catch(e){err.textContent=e.message;err.style.display='block';addLog('error','Pair request failed: '+e.message)}finally{btn.disabled=false;btn.textContent=isLand?'Get Code':'Request Pairing Code'}}async function pollPairCode(sid,codeEl,errEl){for(let i=0;i<40;i++){await new Promise(r=>setTimeout(r,i?2000:700));try{const d=await fetch('/pairing-code?session='+encodeURIComponent(sid),{cache:'no-store'}).then(r=>r.json());if(d.code){codeEl.textContent=d.code;toast('Pairing code ready');addLog('info','Pairing code received for '+sid);return}}catch{}}errEl.textContent='Pairing code not received yet. Keep this page open or try again.';errEl.style.display='block';addLog('warn','Pairing code timeout for '+sid)}async function deleteSession(id){if(!confirm('Delete session '+id+'?'))return;try{const d=await fetch('/session/'+encodeURIComponent(id),{method:'DELETE'}).then(r=>r.json());if(!d.ok)throw new Error(d.error||'Delete failed');toast('Session deleted');addLog('warn','Deleted session '+id);loadStats()}catch(e){toast(e.message);addLog('error','Delete failed: '+e.message)}}
+function connectEvents(){try{const es=new EventSource('/events');es.addEventListener('open',()=>addLog('info','Connected to live events'));es.addEventListener('status',e=>{addLog('info','Status event: '+e.data);loadStats()});es.addEventListener('pairingCode',e=>{const d=JSON.parse(e.data);addLog('info','Pairing code event for '+d.sessionId);['land','admin'].forEach(prefix=>{const sid=$(prefix==='land'?'landSessionId':'adminSessionId')?.value.trim()||'default';if(sid===d.sessionId){$(prefix+'PairCode').textContent=d.code;$(prefix+'PairBox').style.display='block'}})});es.addEventListener('pairingCodeError',e=>addLog('error','Pairing error: '+e.data));es.onerror=()=>addLog('warn','Live events reconnecting…')}catch(e){addLog('error','Events unavailable: '+e.message)}}
+loadDashboardConfig();loadStats();connectEvents();setInterval(loadStats,15000);
+</script>
+</body>
 </html>
