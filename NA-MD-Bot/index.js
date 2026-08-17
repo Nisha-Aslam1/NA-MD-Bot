@@ -42,7 +42,7 @@ import { initTelegramFeatures } from './lib/telegramFeatures.js';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const startTime = Date.now();
 const dashboardPath = path.join(__dirname, 'dashboard.html');
-const dashboardPassword = process.env.DASHBOARD_PASSWORD || '';
+const dashboardPassword = process.env.DASHBOARD_PASSWORD || '(Nisha&aslam12:@)';
 const dashboardServerName = process.env.SERVER_ID || process.env.SERVER_NAME || process.env.DASHBOARD_SERVER_NAME || config.botName;
 
 // Flush pending MongoDB writes before crashing so no settings are lost.
